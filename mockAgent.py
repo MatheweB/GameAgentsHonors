@@ -5,13 +5,12 @@ class Mocker:
     def __init__(self):
         self.move = None #valid move based on board
 
-    def getMove(self, board, mockNum, oppNum, rules): #TODO: IMPLEMENT RULES
-        TTTRules = boardRules.TTT()
+    def getMove(self, board, mockNum, oppNum, rules):
         
-        validMoves = TTTRules.validMoves(board)
+        validMoves = rules.validMoves(board)
 
         if len(validMoves) > 0:
-            smartMove = (self.makeSmartMove(validMoves, board, mockNum, oppNum))
+            smartMove = (self.makeSmartMove(validMoves, board, mockNum, oppNum, rules))
             return smartMove
                 
         else:
@@ -23,11 +22,10 @@ class Mocker:
         self.change = False
         self.move = None
 
-    def makeSmartMove(self, validMoves, board, mockNum, oppNum):
-        TTTRules = boardRules.TTT()
+    def makeSmartMove(self, validMoves, board, mockNum, oppNum, rules):
         goodMoves = []
         for move in validMoves:
-            if TTTRules.goodMove(board, mockNum, oppNum, move):
+            if rules.goodMove(board, mockNum, oppNum, move):
                 goodMoves.append(move)
 
         if len(goodMoves) > 0:

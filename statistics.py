@@ -10,17 +10,17 @@ class StatMachine:
             
             if agent.didLose:
                 addWord = "lost"
-                addNum = 1
+                addNum = 100
             elif agent.didWin:
                 addWord = "won"
                 addNum = 1
             elif agent.neutral:
                 addNum = 1
                 addWord = "neutral"
-            elif not agent.didWin and not agent.didLose:
+            elif not agent.didWin and not agent.didLose and not agent.neutral:
                 addNum = 1
                 addWord = "tied"
-
+                
 
             if addWord not in myDict.keys():
                 myDict[addWord] = {}
@@ -75,7 +75,7 @@ class StatMachine:
 
         finalList = []
 
-        confidence = 0
+        confidence = 1
 
         for item in overall.items():
             status = item[0]

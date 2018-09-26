@@ -15,11 +15,9 @@ class Agent:
 
         self.neutral = False
 
-    def getMove(self, board):
+    def getMove(self, board, rules):
         
-        TTTRules = rules.TTT()
-        
-        validMoves = TTTRules.validMoves(board)
+        validMoves = rules.validMoves(board)
         
         if len(validMoves) > 0:
             
@@ -28,9 +26,9 @@ class Agent:
         else:
             print("INVALID MOVE ERROR in getMove")
 
-    def makeChanges(self, board, topMove):
+    def makeChanges(self, board, rules, topMove):
         if self.change == True:
-            self.coreMove = self.getMove(board)
+            self.coreMove = self.getMove(board, rules)
         self.change = False
         self.move = None
 

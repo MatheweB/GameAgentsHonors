@@ -13,13 +13,18 @@ class Piece:
 class TTTBoard(board.Board):
     def __init__(self):
         super().__init__(3, 3)
-
-    def isFull(self):
-        full = True
-        for y in self.tiles:
-            for x in y:
-                if x == "*":
-                    full = False
-
-        return full
                     
+
+class NimBoard(board.Board):
+    def __init__(self):
+        super().__init__(1, 3)
+        for x in range(0,len(self.tiles)):
+            if self.tiles[x] == "*":
+                self.tiles[x] = 5
+        
+
+    def fill(self, move, placeholder): #Change function params to be custom per-game later
+        self.tiles[move[1]] -= move[0]
+            
+        
+    
