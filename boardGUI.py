@@ -46,8 +46,8 @@ def main():
     simulator = sim.Simulator()
     statMachine = stat.StatMachine()
     TTTRules = rules.TTT()
-    numAgents = 50
-    simNum = 10
+    numAgents = 100
+    simNum = 5
 
     gameNum = 20
     
@@ -69,7 +69,7 @@ def main():
 
             if agentNum == "O" or agentNum == "X":
             
-                for x in range (0,simNum): #runs agents through the simulation x times
+                for x in range (0,simNum):
                     newAgents, completed = simulator.matchAgents(agents, copy.deepcopy(board), depth, agentNum, mockNum)
                     agents = completed + newAgents
                     
@@ -84,7 +84,6 @@ def main():
                 
 
                 print(topMoves)
-                
                 board = updateBoard(board, topMoves)
                 agents = simulator.clearAgents(agents) #clears top moves
                 board.printBoard()
