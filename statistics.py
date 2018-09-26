@@ -1,8 +1,6 @@
 import operator
 import ast
 
-#TODO: FIX DOUBLE ITEMS IN CERTAIN LIST!!! (Ex. [ [100 [0,1] win], [100 [0,1]] win] )
-
 class StatMachine:
     def getStats(self, agentList):
         myDict = {}
@@ -177,9 +175,9 @@ class StatMachine:
             for item in sortedList:
                 if item[2] == "won":
                     wList.append(item)
-                if item[2] == "tied":
+                elif item[2] == "tied":
                     tList.append(item)
-                if item[2] == "neutral":
+                elif item[2] == "neutral":
                     nList.append(item)
                 else:
                     lList.append(item)
