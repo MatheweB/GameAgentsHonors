@@ -10,7 +10,7 @@ class StatMachine:
             
             if agent.didLose:
                 addWord = "lost"
-                addNum = 100
+                addNum = 1
             elif agent.didWin:
                 addWord = "won"
                 addNum = 1
