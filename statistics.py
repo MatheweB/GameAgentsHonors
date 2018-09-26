@@ -1,7 +1,7 @@
 import operator
 import ast
 
-#TODO: CHECK IF LOSING IS STATISTICALLY MUCH HIGHER THAN WINNING
+#TODO: FIX DOUBLE ITEMS IN CERTAIN LIST!!! (Ex. [ [100 [0,1] win], [100 [0,1]] win] )
 
 class StatMachine:
     def getStats(self, agentList):
