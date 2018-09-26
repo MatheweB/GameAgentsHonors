@@ -28,7 +28,10 @@ class Agent:
 
     def makeChanges(self, board, rules, topMove):
         if self.change == True:
-            self.coreMove = self.getMove(board, rules)
+            if topMove != None:
+                self.coreMove = topMove
+            else:
+                self.coreMove = self.getMove(board, rules)
         self.change = False
         self.move = None
 

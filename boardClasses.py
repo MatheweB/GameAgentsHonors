@@ -16,11 +16,15 @@ class TTTBoard(board.Board):
                     
 
 class NimBoard(board.Board):
-    def __init__(self):
+    def __init__(self, stackArray):
         super().__init__(1, 3)
-        for x in range(0,len(self.tiles)):
-            if self.tiles[x] == "*":
-                self.tiles[x] = 5
+        self.tiles = stackArray #user gives in BoardGUI
+        self.n = len(stackArray)
+
+        
+##        for x in range(0,len(self.tiles)):
+##            if self.tiles[x] == "*":
+##                self.tiles[x] = 5
         
 
     def fill(self, move, placeholder): #Change function params to be custom per-game later

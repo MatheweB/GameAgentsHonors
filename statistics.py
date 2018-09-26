@@ -75,7 +75,7 @@ class StatMachine:
 
         finalList = []
 
-        confidence = 0
+        confidence = 1
 
         for item in overall.items():
             status = item[0]
@@ -96,21 +96,10 @@ class StatMachine:
                     neutralList.append(listApp)
                     otherList.append(moveArray)
 
-        if printStuff:
-            print()
-            print()
-            print(lostAltered)
-            for item in otherList:
-                if item not in lostAltered:
-                    if item not in certainList:
-                        print(item)
-                        certainList.append(item)
-            print()
-            print("-----CERTAIN------")
-            print(certainList)
-            print("------------------")
-            print()
-                
+        for item in otherList:
+            if item not in lostAltered:
+                if item not in certainList:
+                    certainList.append(item)
 
         foundItem = False #If all "lost"
 

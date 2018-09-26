@@ -73,11 +73,12 @@ class TTT:
 
 class Nim:
     def win(self,board, playerNum):
-    
-        if board.tiles[0] == 0 and board.tiles[1] == 0 and board.tiles[2] == 0:
-            return True
-        else:
-            return False
+
+        for item in board.tiles:
+            if item != 0:
+                return False
+            
+        return True
 
     def tie(self, board): #can't tie in Nim - Return False
         return False

@@ -9,7 +9,7 @@ import statistics as stat
 import boardRules as rules
 import simulation as sim
 
-depth = 15
+depth = 4
 goodCount = 0
 agentNum = "O"
 mockNum = "X"
@@ -54,14 +54,14 @@ def main():
 
 
     gameRules = rules.Nim()  #rules.TTT()
-    boardType = Board.NimBoard() #Board.TTTBoard()
+    boardType = Board.NimBoard([1, 2, 3, 4, 5]) #Board.TTTBoard()
 
     
     simulator = sim.Simulator()
     statMachine = stat.StatMachine()
     
-    numAgents = 1000
-    simNum = 10
+    numAgents = 100
+    simNum = 20
     gameNum = 20
     
     
@@ -89,15 +89,16 @@ def main():
                     stats = statMachine.getStats(agents)
                     overallStats = statMachine.sumStats(stats, overallStats)
                     
-                    #topMoves = statMachine.highestStats(overallStats)
+                    #topMoves = statMachine.highestStats(overallStats, False)
 
-                    agents = simulator.changeAgents(agents, board, gameRules, None) #topMoves[0][1]) #topMove endpoint in agent.py
+                    agents = simulator.changeAgents(agents, board, gameRules, None) #topMoves[0][1] #topMove endpoint in agent.py
                     #board.printBoard()
                     
-                topMoves = statMachine.highestStats(overallStats, True) #true = print certList
+                topMoves = statMachine.highestStats(overallStats, False) #true = print certList
                 
 
                 print(topMoves)
+                print(agentNum)
                 board = updateBoard(board, topMoves)
                 agents = simulator.clearAgents(agents) #clears top moves
                 board.printBoard()
@@ -140,6 +141,7 @@ def main():
         print()
         print()
         print()
+        print("----------------------------")
 
     print(goodCount)
 
