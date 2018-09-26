@@ -1,0 +1,155 @@
+import operator
+import ast
+
+
+
+#TODO: CHECK IF LOSING IS STATISTICALLY MUCH HIGHER THAN WINNING
+
+
+class StatMachine:
+    def getStats(self, agentList):
+        myDict = {}
+
+        for agent in agentList:
+            agentMove = str(agent.coreMove)
+            
+            if agent.didLose:
+                addWord = "lost"
+                addNum = 1
+            elif agent.didWin:
+                addWord = "won"
+                addNum = 1
+            elif agent.neutral:
+                addNum = 1
+                addWord = "neutral"
+            elif not agent.didWin and not agent.didLose:
+                addNum = 1
+                addWord = "tied"
+
+
+            if addWord not in myDict.keys():
+                myDict[addWord] = {}
+                
+            if agentMove not in myDict[addWord]:
+                myDict[addWord][agentMove] = addNum
+            else:
+                myDict[addWord][agentMove] += addNum
+                
+
+        return myDict
+
+    def sumStats(self, stats, overallStats):
+        
+        for key in stats.keys():
+            
+            if key not in overallStats:
+                overallStats[key] = {}
+
+            for move in stats[key]:
+                if move not in overallStats[key]:
+                    overallStats[key][move] = stats[key][move]
+                else:
+                    overallStats[key][move] += stats[key][move]
+
+        return overallStats
+
+    def arrayify(self, myString):
+        return ast.literal_eval(myString)
+
+
+    def normalize(self, wins, losses):
+        pass
+
+
+    def highestStats(self, overall):
+        high = []
+        
+        lostList = []
+
+
+        otherList = []
+        wonList = []
+        tiedList = []
+        neutralList = []
+        certainList = []
+        
+        unsortedList = []
+        unsortedDict = {}
+
+        finalList = []
+
+        confidence = 1
+
+        for item in overall.items():
+            status = item[0]
+            moveList = item[1]
+            for move in moveList:
+                listApp = [moveList[move], self.arrayify(move), status]
+                if status == "lost":
+                    lostList.append(listApp)
+                if status == "won":
+                    wonList.append(listApp)
+                    otherList.append(listApp)
+                if status == "tied":
+                    tiedList.append(listApp)
+                    otherList.append(listApp)
+                if status == "neutral":
+                    neutralList.append(listApp)
+                    otherList.append(listApp)
+        for item in otherList:
+            if item not in lostList:
+                certainList.append(item)
+        print()
+        print("-----CERTAIN------")
+        print(certainList)
+        print("------------------")
+        print()
+                
+
+        foundItem = False #If all "lost"
+
+        for x in range(0,1): #LOSS CORRECTED 1st PASS - THEN CALCULATING WIN PERCENT VS TIE
+            if x == 0:
+                blackListed = "lost"
+                myList = lostList
+                
+            for item in overall:
+                if item != blackListed and item != "lost":
+                    if blackListed == "lost":
+                        foundItem = True
+                    for move in myList: #Scale down scenarios to prevent losses
+                        
+                        moveString = str(move[1])
+                        if moveString in overall[item].keys():
+                            if int(overall[item][moveString]) > 0:
+                                ratio = move[0]/overall[item][moveString]
+                                if (ratio) > confidence:
+                                    overall[item][moveString] = round(overall[item][moveString]/((move[0]/overall[item][moveString])),4)
+                                
+                                    
+            
+
+        for item in overall.items():
+            status = item[0]
+            moveList = item[1]
+            for move in moveList:              
+                if status != "lost" or foundItem == False:
+                    unsortedList.append([moveList[move], self.arrayify(move), status])
+
+        
+        for item in unsortedList: #Get the most numerous tie/win scenarios
+            if str(item[1]) not in unsortedDict:
+                unsortedDict[str(item[1])] = item         
+            else:
+                if item[0] > unsortedDict[str(item[1])][0]:
+                    unsortedDict[str(item[1])] = item
+                
+        for item in unsortedDict.items():
+            finalList.append(item[1])
+
+        if foundItem == False:
+            sortedList = sorted(finalList, key=operator.itemgetter(0), reverse = False)
+        else:
+            sortedList = sorted(finalList, key=operator.itemgetter(0), reverse = True)
+            
+        return sortedList
