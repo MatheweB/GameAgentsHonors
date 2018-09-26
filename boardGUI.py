@@ -46,8 +46,8 @@ def main():
     simulator = sim.Simulator()
     statMachine = stat.StatMachine()
     TTTRules = rules.TTT()
-    numAgents = 1
-    simNum = 1000
+    numAgents = 1000
+    simNum = 1
 
     gameNum = 20
     

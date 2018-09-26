@@ -102,8 +102,9 @@ class StatMachine:
             print(lostAltered)
             for item in otherList:
                 if item not in lostAltered:
-                    print(item)
-                    certainList.append(item)
+                    if item not in certainList:
+                        print(item)
+                        certainList.append(item)
             print()
             print("-----CERTAIN------")
             print(certainList)
