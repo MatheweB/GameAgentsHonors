@@ -75,7 +75,7 @@ class StatMachine:
 
         finalList = []
 
-        confidence = 1
+        confidence = 0
 
         for item in overall.items():
             status = item[0]
