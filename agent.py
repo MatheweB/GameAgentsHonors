@@ -28,9 +28,9 @@ class Agent:
         else:
             print("INVALID MOVE ERROR in getMove")
 
-    def makeChanges(self, board, topMove):
+    def makeChanges(self, board):
         if self.change == True:
-            self.coreMove = topMove #self.getMove(board)
+            self.coreMove = self.getMove(board)
         self.change = False
         self.move = None
 

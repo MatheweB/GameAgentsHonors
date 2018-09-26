@@ -1,10 +1,7 @@
 import operator
 import ast
 
-
-
 #TODO: CHECK IF LOSING IS STATISTICALLY MUCH HIGHER THAN WINNING
-
 
 class StatMachine:
     def getStats(self, agentList):
@@ -65,12 +62,14 @@ class StatMachine:
         high = []
         
         lostList = []
+        lostAltered = []
 
 
         otherList = []
         wonList = []
         tiedList = []
         neutralList = []
+        
         certainList = []
         
         unsortedList = []
@@ -85,19 +84,26 @@ class StatMachine:
             moveList = item[1]
             for move in moveList:
                 listApp = [moveList[move], self.arrayify(move), status]
+                moveArray = self.arrayify(move)
                 if status == "lost":
+                    print("I LOST" + str(moveArray))
                     lostList.append(listApp)
+                    lostAltered.append(moveArray)
                 if status == "won":
                     wonList.append(listApp)
-                    otherList.append(listApp)
+                    otherList.append(moveArray)
                 if status == "tied":
                     tiedList.append(listApp)
-                    otherList.append(listApp)
+                    otherList.append(moveArray)
                 if status == "neutral":
                     neutralList.append(listApp)
-                    otherList.append(listApp)
+                    otherList.append(moveArray)
+        print()
+        print()
+        print(lostAltered)
         for item in otherList:
-            if item not in lostList:
+            if item not in lostAltered:
+                print(item)
                 certainList.append(item)
         print()
         print("-----CERTAIN------")
@@ -132,8 +138,14 @@ class StatMachine:
         for item in overall.items():
             status = item[0]
             moveList = item[1]
-            for move in moveList:              
-                if status != "lost" or foundItem == False:
+            for move in moveList:
+                if len(certainList) > 0:
+                    if status != "lost" or foundItem == False:
+                        if self.arrayify(move) in certainList:
+                            unsortedList.append([moveList[move], self.arrayify(move), status])
+                            
+                
+                elif status != "lost" or foundItem == False:
                     unsortedList.append([moveList[move], self.arrayify(move), status])
 
         

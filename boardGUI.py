@@ -3,7 +3,6 @@ import copy
 import operator
 import time
 
-
 import boardClasses as Board
 import agent
 import statistics as stat
@@ -27,7 +26,6 @@ def initAgents(number):
 
 
 def updateBoard(board, highestStats):
-    #print(highestStats)
     move = highestStats[0][1]
     board.fill(move, agentNum)
     return board
@@ -62,15 +60,13 @@ def main():
         done = False
 
         agents = initAgents(numAgents)
-        
+
         while not done:
 
             turnNum = 1
             overallStats = {}
 
             if agentNum == "O":# or agentNum == "X":
-
-                topMoves = None
             
                 for x in range (0,simNum): #runs agents through the simulation x times
                     newAgents, completed = simulator.matchAgents(agents, copy.deepcopy(board), depth, agentNum, mockNum)
@@ -78,12 +74,9 @@ def main():
                     
                     stats = statMachine.getStats(agents)
                     overallStats = statMachine.sumStats(stats, overallStats)
-                    
-                    topMoves = statMachine.highestStats(overallStats)
-                    
-                    agents = simulator.changeAgents(agents, board, topMoves[0][1])
 
-            
+                    agents = simulator.changeAgents(agents, board)
+                    
                 topMoves = statMachine.highestStats(overallStats)
                 agents = simulator.clearAgents(agents) #clears top moves
 

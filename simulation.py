@@ -12,9 +12,9 @@ class Simulator:
             agent.neutral = False
         return agents
 
-    def changeAgents(self, agents, board, topMove):
+    def changeAgents(self, agents, board):
         for agent in agents:
-            agent.makeChanges(board, topMove)
+            agent.makeChanges(board)
         return agents
 
 
@@ -64,6 +64,7 @@ class Simulator:
             elif board.isFull():
                 current.didLose = False
                 current.didWin = False
+                current.change = True
                 return False
         
 
@@ -82,6 +83,7 @@ class Simulator:
             elif board.isFull():
                 current.didLose = False
                 current.didWin = False
+                current.change = True
                 return False
             
 

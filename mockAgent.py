@@ -15,7 +15,7 @@ class Mocker:
             return smartMove
                 
         else:
-            print("INVALID MOVE ERROR in getMove")
+            print("INVALID MOVE ERROR in getMove MockAgent")
 
     def makeChanges(self, board):
         if self.change == True:
@@ -25,8 +25,13 @@ class Mocker:
 
     def makeSmartMove(self, validMoves, board, mockNum, oppNum):
         TTTRules = boardRules.TTT()
+        goodMoves = []
         for move in validMoves:
             if TTTRules.goodMove(board, mockNum, oppNum, move):
-                return move
+                goodMoves.append(move)
 
-        return validMoves[random.randint(0,len(validMoves)-1)]
+        if len(goodMoves) > 0:
+            return goodMoves[random.randint(0,len(goodMoves)-1)]
+            
+        else:
+            return validMoves[random.randint(0,len(validMoves)-1)]

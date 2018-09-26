@@ -40,12 +40,21 @@ class TTT:
 
     def goodMove(self, board, playerNum, oppNum, move):
         newBoard = copy.deepcopy(board)
+
         
         newBoard.fill(move, playerNum)
+        newBoard.printBoard()
+        
         selfWon = self.win(newBoard, playerNum)
+        print(selfWon)
         
         newBoard.fill(move, oppNum)
+        newBoard.printBoard()
+        
         oppWon = self.win(newBoard, oppNum)
+        print(oppWon)
+
+        exit(5)
 
         if selfWon:
             return True
