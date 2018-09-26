@@ -46,8 +46,8 @@ def main():
     simulator = sim.Simulator()
     statMachine = stat.StatMachine()
     TTTRules = rules.TTT()
-    numAgents = 100
-    simNum = 5
+    numAgents = 1
+    simNum = 1000
 
     gameNum = 20
     
@@ -67,7 +67,7 @@ def main():
             overallStats = {}
             topMoves = None
 
-            if agentNum == "O" or agentNum == "X":
+            if agentNum == "O": #or agentNum == "X":
             
                 for x in range (0,simNum):
                     newAgents, completed = simulator.matchAgents(agents, copy.deepcopy(board), depth, agentNum, mockNum)
@@ -80,7 +80,7 @@ def main():
 
                     agents = simulator.changeAgents(agents, board, None) #topMoves[0][1]) #topMove endpoint in agent.py
                     
-                topMoves = statMachine.highestStats(overallStats, False)
+                topMoves = statMachine.highestStats(overallStats, True) #true = print certList
                 
 
                 print(topMoves)

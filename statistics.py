@@ -141,6 +141,8 @@ class StatMachine:
                 if len(certainList) > 0:
                     if status != "lost" or foundItem == False:
                         if self.arrayify(move) in certainList:
+                            #print("OH BOY IM CERTAIN")
+                            #print(move)
                             unsortedList.append([moveList[move], self.arrayify(move), status])
 
                 else:
@@ -181,7 +183,6 @@ class StatMachine:
                     nList.append(item)
                 else:
                     lList.append(item)
-                    
             totalList = wList + tList + nList + lList
             return totalList
             
