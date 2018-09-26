@@ -12,9 +12,9 @@ class Simulator:
             agent.neutral = False
         return agents
 
-    def changeAgents(self, agents, board):
+    def changeAgents(self, agents, board, topMove):
         for agent in agents:
-            agent.makeChanges(board)
+            agent.makeChanges(board, topMove)
         return agents
 
 

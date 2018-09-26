@@ -58,7 +58,7 @@ class StatMachine:
         pass
 
 
-    def highestStats(self, overall):
+    def highestStats(self, overall, printStuff = False):
         high = []
         
         lostList = []
@@ -86,7 +86,6 @@ class StatMachine:
                 listApp = [moveList[move], self.arrayify(move), status]
                 moveArray = self.arrayify(move)
                 if status == "lost":
-                    print("I LOST" + str(moveArray))
                     lostList.append(listApp)
                     lostAltered.append(moveArray)
                 if status == "won":
@@ -98,18 +97,20 @@ class StatMachine:
                 if status == "neutral":
                     neutralList.append(listApp)
                     otherList.append(moveArray)
-        print()
-        print()
-        print(lostAltered)
-        for item in otherList:
-            if item not in lostAltered:
-                print(item)
-                certainList.append(item)
-        print()
-        print("-----CERTAIN------")
-        print(certainList)
-        print("------------------")
-        print()
+
+        if printStuff:
+            print()
+            print()
+            print(lostAltered)
+            for item in otherList:
+                if item not in lostAltered:
+                    print(item)
+                    certainList.append(item)
+            print()
+            print("-----CERTAIN------")
+            print(certainList)
+            print("------------------")
+            print()
                 
 
         foundItem = False #If all "lost"
@@ -134,7 +135,7 @@ class StatMachine:
                                 
                                     
             
-
+        
         for item in overall.items():
             status = item[0]
             moveList = item[1]
@@ -143,18 +144,20 @@ class StatMachine:
                     if status != "lost" or foundItem == False:
                         if self.arrayify(move) in certainList:
                             unsortedList.append([moveList[move], self.arrayify(move), status])
-                            
-                
-                elif status != "lost" or foundItem == False:
-                    unsortedList.append([moveList[move], self.arrayify(move), status])
+
+                else:
+                    if status != "lost" or foundItem == False:
+                        unsortedList.append([moveList[move], self.arrayify(move), status])
+
 
         
         for item in unsortedList: #Get the most numerous tie/win scenarios
             if str(item[1]) not in unsortedDict:
-                unsortedDict[str(item[1])] = item         
+                unsortedDict[str(item[1])] = item
             else:
                 if item[0] > unsortedDict[str(item[1])][0]:
                     unsortedDict[str(item[1])] = item
+                    
                 
         for item in unsortedDict.items():
             finalList.append(item[1])
@@ -163,5 +166,26 @@ class StatMachine:
             sortedList = sorted(finalList, key=operator.itemgetter(0), reverse = False)
         else:
             sortedList = sorted(finalList, key=operator.itemgetter(0), reverse = True)
+
+        wList = []
+        tList = []
+        nList = []
+        lList = []
+
+        
+        if len(certainList) > 0:
+            for item in sortedList:
+                if item[2] == "won":
+                    wList.append(item)
+                if item[2] == "tied":
+                    tList.append(item)
+                if item[2] == "neutral":
+                    nList.append(item)
+                else:
+                    lList.append(item)
+                    
+            totalList = wList + tList + nList + lList
+            return totalList
+            
             
         return sortedList

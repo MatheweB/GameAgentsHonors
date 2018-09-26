@@ -47,7 +47,7 @@ def main():
     statMachine = stat.StatMachine()
     TTTRules = rules.TTT()
     numAgents = 100
-    simNum = 20
+    simNum = 10
 
     gameNum = 20
     
@@ -65,6 +65,7 @@ def main():
 
             turnNum = 1
             overallStats = {}
+            topMoves = None
 
             if agentNum == "O":# or agentNum == "X":
             
@@ -74,16 +75,20 @@ def main():
                     
                     stats = statMachine.getStats(agents)
                     overallStats = statMachine.sumStats(stats, overallStats)
-
-                    agents = simulator.changeAgents(agents, board)
                     
-                topMoves = statMachine.highestStats(overallStats)
-                agents = simulator.clearAgents(agents) #clears top moves
+                    #topMoves = statMachine.highestStats(overallStats)
+
+                    agents = simulator.changeAgents(agents, board, None) #topMoves[0][1]) #topMove endpoint in agent.py
+                    
+                topMoves = statMachine.highestStats(overallStats, True)
+                
 
                 print(topMoves)
-
+                
                 board = updateBoard(board, topMoves)
+                agents = simulator.clearAgents(agents) #clears top moves
                 board.printBoard()
+                
 
             elif agentNum == "X":
                 y = input("row: ")
