@@ -57,7 +57,6 @@ class Simulator:
             if rules.win(board, agentNum):
                 current.didLose = False
                 current.didWin = True
-                current.change = True
                 return False
             
             elif rules.tie(board):
