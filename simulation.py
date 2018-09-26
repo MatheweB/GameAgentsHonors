@@ -83,6 +83,7 @@ class Simulator:
             elif board.isFull():
                 current.didLose = False
                 current.didWin = False
+                current.change = True
                 return False
             
 
