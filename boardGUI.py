@@ -9,7 +9,7 @@ import statistics as stat
 import boardRules as rules
 import simulation as sim
 
-depth = 4
+depth = 8
 goodCount = 0
 agentNum = "O"
 mockNum = "X"
@@ -25,12 +25,12 @@ def initAgents(number):
     return(agentList)
 
 
-def updateBoard(board, highestStats): #TODO IMPLEMENT RULES
+def updateBoard(board, highestStats): 
     move = highestStats[0][1]
     board.fill(move, agentNum)
     return board
 
-def updateBoardPlayer(board, x, y):
+def updateBoardPlayer(board, x, y): #TODO IMPLEMENT RULES
 
     if board.m == 1:
         move = []
@@ -54,14 +54,14 @@ def main():
 
 
     gameRules = rules.Nim()  #rules.TTT()
-    boardType = Board.NimBoard([1, 2, 3, 4, 5]) #Board.TTTBoard()
+    boardType = Board.NimBoard([2, 2, 2]) #Board.TTTBoard()
 
     
     simulator = sim.Simulator()
     statMachine = stat.StatMachine()
     
-    numAgents = 100
-    simNum = 20
+    numAgents = 200
+    simNum = 50
     gameNum = 20
     
     
@@ -80,7 +80,7 @@ def main():
             overallStats = {}
             topMoves = None
 
-            if agentNum == "O": #or agentNum == "X":
+            if agentNum == "O" or agentNum == "X":
             
                 for x in range (0,simNum):
                     newAgents, completed = simulator.matchAgents(agents, copy.deepcopy(board), depth, agentNum, mockNum, gameRules)

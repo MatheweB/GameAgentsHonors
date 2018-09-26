@@ -41,7 +41,6 @@ class TTT:
 
     def goodMove(self, board, playerNum, oppNum, move):
         newBoard = copy.deepcopy(board)
-
         
         newBoard.fill(move, playerNum)
         
