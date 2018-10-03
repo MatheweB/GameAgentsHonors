@@ -16,6 +16,7 @@ class Mocker:
         else:
             print("INVALID MOVE ERROR in getMove MockAgent")
 
+
     def makeChanges(self, board):
         if self.change == True:
             self.coreMove = self.getMove(board)

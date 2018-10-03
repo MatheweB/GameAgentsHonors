@@ -1,4 +1,5 @@
 import copy
+import interactions
 
 class TTT:
     def win(self,board, playerNum):
@@ -67,28 +68,41 @@ class TTT:
                 if board.tiles[y][x] == "*":
                     validMoves.append([y,x])
         return validMoves
+    
+    def simMachine(self):
+        return interactions.TTTInteract()
 
 
 
 class Nim:
-    def win(self,board, playerNum):
-
+    
+    def win(self,board, placeholder = None): #make modular!
         for item in board.tiles:
             if item != 0:
                 return False
             
         return True
 
-    def tie(self, board): #can't tie in Nim - Return False
-        return False
+
+    def nimWin(self, board, move):
+        winCount = 0
+        zeroColCount = 0
+        for item in board.tiles:
+            if item != 0:
+                zeroColCount += 1
+                if (item-move[0]) == 0:
+                    winCount += 1
+            
+        if zeroColCount == 1 and winCount == 1:
+            return True
+        
+        else:
+            return False
         
 
     def goodMove(self, board, playerNum, oppNum, move):
-        newBoard = copy.deepcopy(board)
-
-        newBoard.fill(move, playerNum)
         
-        selfWon = self.win(newBoard, playerNum)
+        selfWon = self.nimWin(board, move)
 
         if selfWon:
             return True
@@ -104,6 +118,12 @@ class Nim:
                 for num in range(1, board.tiles[x]+1):
                     validMoves.append([num, x]) #taking "num" from pile "x"
         return validMoves
+    
+
+    def simMachine(self):
+        return interactions.nimInteract()
+        
+        
                     
 
     

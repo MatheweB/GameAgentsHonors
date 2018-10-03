@@ -20,14 +20,9 @@ class NimBoard(board.Board):
         super().__init__(1, 3)
         self.tiles = stackArray #user gives in BoardGUI
         self.n = len(stackArray)
-
-        
-##        for x in range(0,len(self.tiles)):
-##            if self.tiles[x] == "*":
-##                self.tiles[x] = 5
         
 
-    def fill(self, move, placeholder): #Change function params to be custom per-game later
+    def fill(self, move, placeholder = None): #make modular!
         self.tiles[move[1]] -= move[0]
             
         

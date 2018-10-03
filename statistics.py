@@ -119,7 +119,7 @@ class StatMachine:
                             if int(overall[item][moveString]) > 0:
                                 ratio = move[0]/overall[item][moveString]
                                 if (ratio) > confidence:
-                                    overall[item][moveString] = round(overall[item][moveString]/((move[0]/overall[item][moveString])),4)
+                                    overall[item][moveString] = round(overall[item][moveString]/ratio,4)
                                 
                                     
             
@@ -131,8 +131,9 @@ class StatMachine:
                 if len(certainList) > 0:
                     if status != "lost" or foundItem == False:
                         if self.arrayify(move) in certainList:
-                            #print("OH BOY IM CERTAIN")
-                            #print(move)
+                            if printStuff:
+                                print("OH BOY IM CERTAIN")
+                                #print(move)
                             unsortedList.append([moveList[move], self.arrayify(move), status])
 
                 else:
