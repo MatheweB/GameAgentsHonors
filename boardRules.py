@@ -2,6 +2,9 @@ import copy
 import interactions
 
 class TTT:
+    def is_indiff(self):
+        return False
+    
     def win(self,board, playerNum):
         
         if board.tiles[0][0] == playerNum and board.tiles[0][1] == playerNum and board.tiles[0][2] == playerNum:
@@ -40,16 +43,16 @@ class TTT:
         return full
         
 
-    def goodMove(self, board, playerNum, oppNum, move):
+    def goodMove(self, board, move, playerNum, mockNum):
         newBoard = copy.deepcopy(board)
         
         newBoard.fill(move, playerNum)
         
         selfWon = self.win(newBoard, playerNum)
         
-        newBoard.fill(move, oppNum)
+        newBoard.fill(move, mockNum)
         
-        oppWon = self.win(newBoard, oppNum)
+        oppWon = self.win(newBoard, mockNum)
 
         if selfWon:
             return True
@@ -76,7 +79,10 @@ class TTT:
 
 class Nim:
     
-    def win(self,board, placeholder = None): #make modular!
+    def is_indiff(self):
+        return True
+    
+    def win(self,board):
         for item in board.tiles:
             if item != 0:
                 return False
@@ -85,22 +91,45 @@ class Nim:
 
 
     def nimWin(self, board, move):
-        winCount = 0
-        zeroColCount = 0
-        for item in board.tiles:
-            if item != 0:
-                zeroColCount += 1
-                if (item-move[0]) == 0:
-                    winCount += 1
-            
-        if zeroColCount == 1 and winCount == 1:
-            return True
-        
-        else:
-            return False
-        
+        testB = copy.deepcopy(board)
+        testB.fill(move)
 
-    def goodMove(self, board, playerNum, oppNum, move):
+        justWon = True
+        for item in testB.tiles:
+            if item != 0:
+                justWon = False
+            
+        if justWon == True:
+            return True
+
+        else:
+            count = 0
+            for item in testB.tiles:
+                if item != 0:
+                    count += 1
+                    
+            if count%2 != 0:
+                return False
+            
+            else:
+                return True
+
+        
+        
+        
+    def getNimVal(self, board, move):
+        boardNew = copy.deepcopy(board)
+
+        boardNew.fill(move)
+
+        nimSum = 0
+        for item in boardNew.tiles:
+            nimSum ^= item
+
+        return nimSum
+            
+
+    def goodMove(self, board, move):
         
         selfWon = self.nimWin(board, move)
 
@@ -122,9 +151,4 @@ class Nim:
 
     def simMachine(self):
         return interactions.nimInteract()
-        
-        
-                    
-
-    
         

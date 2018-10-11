@@ -13,7 +13,16 @@ class Piece:
 class TTTBoard(board.Board):
     def __init__(self):
         super().__init__(3, 3)
-                    
+
+    def userUpdate(self, playerNum):
+        y = int(input("row: "))
+        x = int(input("column: "))
+        
+        move = []
+        move.append(y)
+        move.append(x)
+        self.fill(move, agentNum)
+                   
 
 class NimBoard(board.Board):
     def __init__(self, stackArray):
@@ -21,9 +30,17 @@ class NimBoard(board.Board):
         self.tiles = stackArray #user gives in BoardGUI
         self.n = len(stackArray)
         
-
     def fill(self, move, placeholder = None): #make modular!
         self.tiles[move[1]] -= move[0]
+
+    def userUpdate(self):
+        col = int(input("col: "))
+        value = int(input("number: "))
+        
+        move = []
+        move.append(value)
+        move.append(col)
+        self.fill(move)
             
         
     

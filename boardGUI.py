@@ -4,130 +4,81 @@ import operator
 import time
 
 import boardClasses as Board
-import agent
-import statistics as stat
-import boardRules as rules
-import simulation as sim
-
-depth = 200
-agentNum = "O"
-mockNum = "X"
-
-
-def getAgentNum():
-    return agentNum
-
-def initAgents(number):
-    agentList = []
-    for x in range(0,number):
-        agentList.append(agent.Agent())
-    return(agentList)
-
-
-def updateBoard(board, highestStats): 
-    move = highestStats[0][1]
-    board.fill(move, agentNum)
-    return board
-
-def updateBoardPlayer(board, x, y): #TODO IMPLEMENT RULES
-
-    if board.m == 1:
-        move = []
-        move.append(y)
-        move.append(x)
-        board.fill(move, agentNum)
-
-    else:
-        move = []
-        move.append(y)
-        move.append(x)
-        board.fill(move, agentNum)
-        
-    return board
+import boardRules as Rules
+import runSim as Sim
 
 
 def main():
-    global agentNum
-    global mockNum
-
-    gameRules = rules.Nim()  #rules.TTT()
-    boardType = Board.NimBoard([1,2,3,4,5]) #Board.TTTBoard()
-
+    simRunner = Sim.runSim()
     
-    simulator = sim.Simulator()
-    statMachine = stat.StatMachine()
+    gameRules = Rules.Nim()  #rules.TTT() #
+    board =  Board.NimBoard([1,2,3,4,5]) #Board.TTTBoard() #
+
+    playFirst = False
+    playSecond = True
+    userUpdate = False
+
+    numAgents = 80
+    simNum = 50
+    depth = 200
     
-    numAgents = 500
-    simNum = 100
     gameNum = 20
-    
-    
-    
-    for x in range(0,gameNum):
 
-        board = copy.deepcopy(boardType)
+    for game in range(0,gameNum):
 
-        done = False
+        if gameRules.is_indiff(): # An indifferent game
 
-        agents = initAgents(numAgents)
-
-        agentNum = "1"
-        
-        mockNum = "2"
-
-        while not done:
-
-            overallStats = {}
-            topMoves = None
-
-            if agentNum == "1":# or agentNum == "X":
+            moveCount = 0
+            done = False
             
-                for x in range (0,simNum):
-                    newAgents, completed = simulator.matchAgents(agents, copy.deepcopy(board), depth, agentNum, mockNum, gameRules)
-                    agents = completed + newAgents
-                    
-                    stats = statMachine.getStats(agents)
-                    overallStats = statMachine.sumStats(stats, overallStats)
-                    
-                    #topMoves = statMachine.highestStats(overallStats, False)
+            while done == False:
+                if playFirst:
+                    if moveCount%2 == 0:
+                        userUpdate = True
+                    else:
+                        userUpdate = False
 
-                    agents = simulator.changeAgents(agents, board, gameRules, None) #topMoves[0][1]) #topMove endpoint in agent.py
-                    #board.printBoard()
-                    
-                topMoves = statMachine.highestStats(overallStats, printStuff = True)
-                
+                elif playSecond:
+                    if moveCount%2 == 1:
+                        userUpdate = True
+                    else:
+                        userUpdate = False
+                       
+                newBoard, topMoves, done = simRunner.run_indiff(numAgents, simNum, gameRules, board, depth, userUpdate)
 
+                if topMoves != None:
+                    print(topMoves)
+                    
+                newBoard.printBoard()
+                board = newBoard
+                moveCount += 1
+
+        else: # A normal game
+            
+            agentNum = "1"
+            mockNum = "2"
+            done = "neutral"
+
+            moveCount = 0
+            while done not in ["win", "tie"]:
+                if playFirst:
+                    if moveCount%2 == 0:
+                        userUpdate = True
+                    else:
+                        userUpdate = False
+
+                elif playSecond:
+                    if moveCount%2 == 1:
+                        userUpdate = True
+                    else:
+                        userUpdate = False
+                    
+                newBoard, topMoves, done, agentNum, mockNum = simRunner.run_norm(self, numAgents, simNum, gameRules, board, depth, agentNum, mockNum, userUpdate)
                 print(topMoves)
                 print(agentNum)
-                
-                board = updateBoard(board, topMoves)
-                agents = simulator.clearAgents(agents) #clears top moves
-                board.printBoard()
-                
-
-            elif agentNum == "2":
-                if board.m == 1: #TODO IMPLEMENT RULES
-                    y = input("col: ")
-                    value = input("number: ")
-                    board = updateBoardPlayer(board, int(y), int(value))
-                
-
-                else:
-                    y = input("row: ")
-                    x = input("column: ")
-                    board = updateBoardPlayer(board, int(x), int(y))
-
-                
-            if agentNum == "2":
-                agentNum = "1"
-                mockNum = "2"
-                
-            else:
-                agentNum = "2"
-                mockNum = "1"
-
-            overallStats = {}
-
+                newBoard.printBoard()
+                board = newBoard
+                moveCount += 1
 
 if __name__ == "__main__":
     main()

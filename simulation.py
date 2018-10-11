@@ -17,11 +17,11 @@ class Simulator:
             agent.makeChanges(board, rules, topMove)
         return agents
 
-
-    def matchAgents(self, agents, initBoard, depth, agentNum, mockNum, rules): #divide list into those that go 1st and those that go 2nd
+    def matchAgents(self, agents, initBoard, depth, rules, playerNum = None, mockNum = None): #divide list into those that go 1st and those that go 2nd
 
         newAgents = []
         completed = []
+        
         mockAgent = MA.Mocker()
         #agents = self.clearAgents(agents)
 
@@ -31,8 +31,11 @@ class Simulator:
             board = copy.deepcopy(initBoard)
 
             simMachine = rules.simMachine()
-            
-            should_continue = simMachine.interact(board, current, mockAgent, depth, agentNum, mockNum, rules)
+
+            if rules.is_indiff():
+                should_continue = simMachine.interact(board, current, mockAgent, depth, rules)
+            else:
+                should_continue = simMachine.interact(board, current, mockAgent, depth, rules, playerNum, mockNum)               
 
             if should_continue:
                 newAgents.append(current)

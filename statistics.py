@@ -2,6 +2,7 @@ import operator
 import ast
 
 class StatMachine:
+    
     def getStats(self, agentList):
         myDict = {}
 
@@ -9,9 +10,11 @@ class StatMachine:
             agentMove = str(agent.coreMove)
             
             if agent.didLose:
+                
                 addWord = "lost"
                 addNum = 1
             elif agent.didWin:
+                
                 addWord = "won"
                 addNum = 1
             elif agent.neutral:
