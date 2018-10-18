@@ -24,7 +24,7 @@ class runSim:
         return board
 
 
-    def run_indiff(self, numAgents, simNum, gameRules, board, depth, userUpdate = False, printStuff = True):
+    def run_indiff(self, numAgents, simNum, gameRules, board, depth, userUpdate = False, isRec = False, printStuff = True):
 
         if userUpdate == True:
             newBoard = copy.deepcopy(board)
@@ -44,14 +44,13 @@ class runSim:
 
             done = False
 
-
             agentsList = self.initAgents(numAgents)
 
             overallStats = {}
             topMoves = None
 
             for x in range (0,simNum):
-                newAgents, completed = simulator.matchAgents(agentsList, copy.deepcopy(board), depth, gameRules)
+                newAgents, completed = simulator.matchAgents(agentsList, copy.deepcopy(board), depth, gameRules, isRec = isRec)
                 agentsList = completed + newAgents
                 
                 stats = statMachine.getStats(agentsList)
@@ -75,18 +74,29 @@ class runSim:
             return newBoard, topMoves, done
         
 
-    def run_norm(self, numAgents, simNum, gameRules, board, depth, playerNum, mockNum, userUpdate = False, printStuff = True):
+    def run_norm(self, numAgents, simNum, gameRules, board, depth, playerNum, mockNum, userUpdate = False, isRec = False, printStuff = True):
 
         if userUpdate == True:
             newBoard = copy.deepcopy(board)
             newBoard.userUpdate(playerNum)
-
+            
             if gameRules.win(newBoard, playerNum):
-                done = True
-            else:
-                done = False
+                done = "win"
                 
-            return newBoard, None, done
+            elif gameRules.tie(newBoard):
+                done = "tie"
+            else:
+                done = "neutral"
+                
+            if playerNum == "2":
+                playerNum = "1"
+                mockNum = "2"
+            
+            else:
+                playerNum = "2"
+                mockNum = "1"
+            
+            return newBoard, None, done, playerNum, mockNum
 
         else:
         
@@ -95,14 +105,14 @@ class runSim:
 
             done = False
 
-            agentsList = self.initAgents(self,numAgents)
+            agentsList = self.initAgents(numAgents)
 
             overallStats = {}
             topMoves = None
 
             
             for x in range (0,simNum):
-                newAgents, completed = simulator.matchAgents(agentsList, copy.deepcopy(board), depth, gameRules, playerNum, mockNum)
+                newAgents, completed = simulator.matchAgents(agentsList, copy.deepcopy(board), depth, gameRules, playerNum, mockNum, isRec = isRec)
                 agentsList = completed + newAgents
                 
                 stats = statMachine.getStats(agentsList)
@@ -110,7 +120,7 @@ class runSim:
                 
                 #topMoves = statMachine.highestStats(overallStats, False)
 
-                agentsList = simulator.changeAgents(agents, board, gameRules, None) #topMoves[0][1]) #topMove endpoint in agent.py
+                agentsList = simulator.changeAgents(agentsList, board, gameRules, None) #topMoves[0][1]) #topMove endpoint in agent.py
                 
             topMoves = statMachine.highestStats(overallStats, printStuff)
 
@@ -121,7 +131,7 @@ class runSim:
             if gameRules.win(newBoard, playerNum):
                 done = "win"
                 
-            elif gameTules.tie(newBoard, playerNum):
+            elif gameRules.tie(newBoard):
                 done = "tie"
             else:
                 done = "neutral"
@@ -135,4 +145,3 @@ class runSim:
                 mockNum = "1"
 
             return newBoard, topMoves, done, playerNum, mockNum
-

@@ -21,7 +21,7 @@ class TTTBoard(board.Board):
         move = []
         move.append(y)
         move.append(x)
-        self.fill(move, agentNum)
+        self.fill(move, playerNum)
                    
 
 class NimBoard(board.Board):

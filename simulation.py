@@ -17,7 +17,7 @@ class Simulator:
             agent.makeChanges(board, rules, topMove)
         return agents
 
-    def matchAgents(self, agents, initBoard, depth, rules, playerNum = None, mockNum = None): #divide list into those that go 1st and those that go 2nd
+    def matchAgents(self, agents, initBoard, depth, rules, playerNum = None, mockNum = None, isRec = False): #divide list into those that go 1st and those that go 2nd
 
         newAgents = []
         completed = []
@@ -33,9 +33,9 @@ class Simulator:
             simMachine = rules.simMachine()
 
             if rules.is_indiff():
-                should_continue = simMachine.interact(board, current, mockAgent, depth, rules)
+                should_continue = simMachine.interact(board, current, mockAgent, depth, rules, isRec = isRec)
             else:
-                should_continue = simMachine.interact(board, current, mockAgent, depth, rules, playerNum, mockNum)               
+                should_continue = simMachine.interact(board, current, mockAgent, depth, rules, playerNum, mockNum, isRec = isRec)               
 
             if should_continue:
                 newAgents.append(current)

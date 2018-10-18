@@ -11,15 +11,16 @@ import runSim as Sim
 def main():
     simRunner = Sim.runSim()
     
-    gameRules = Rules.Nim()  #rules.TTT() #
-    board =  Board.NimBoard([1,2,3,4,5]) #Board.TTTBoard() #
+    gameRules = Rules.Nim()  #Rules.TTT() # 
+    OGBoard =  Board.NimBoard([1,2,3,4,5]) #Board.TTTBoard() # 
+    board = copy.deepcopy(OGBoard)
 
     playFirst = False
     playSecond = True
     userUpdate = False
 
-    numAgents = 80
-    simNum = 50
+    numAgents = 50
+    simNum = 40
     depth = 200
     
     gameNum = 20
@@ -52,6 +53,9 @@ def main():
                 newBoard.printBoard()
                 board = newBoard
                 moveCount += 1
+                
+            board = copy.deepcopy(OGBoard)
+            
 
         else: # A normal game
             
@@ -60,7 +64,7 @@ def main():
             done = "neutral"
 
             moveCount = 0
-            while done not in ["win", "tie"]:
+            while done != "win" and done != "tie":
                 if playFirst:
                     if moveCount%2 == 0:
                         userUpdate = True
@@ -73,12 +77,16 @@ def main():
                     else:
                         userUpdate = False
                     
-                newBoard, topMoves, done, agentNum, mockNum = simRunner.run_norm(self, numAgents, simNum, gameRules, board, depth, agentNum, mockNum, userUpdate)
+                newBoard, topMoves, done, agentNum, mockNum = simRunner.run_norm(numAgents, simNum, gameRules, board, depth, agentNum, mockNum, userUpdate)
+
                 print(topMoves)
                 print(agentNum)
+                print(done)
                 newBoard.printBoard()
                 board = newBoard
                 moveCount += 1
+                
+            board = copy.deepcopy(OGBoard)
 
 if __name__ == "__main__":
     main()

@@ -3,7 +3,7 @@ import mockAgent as MA
 import boardRules
 
 class TTTInteract:
-    def interact(self, board, current, mock, depth, rules, agentNum, mockNum):
+    def interact(self, board, current, mock, depth, rules, agentNum, mockNum, isRec = False):
         #if something bad happens, return "change"
         #else return "okay"
         
@@ -28,7 +28,7 @@ class TTTInteract:
                 return False
         
 
-            mock.move = mock.getMove(board, mockNum, agentNum, rules)
+            mock.move = mock.getMove(board, rules, mockNum, agentNum, isRec = isRec)
 
             
             board.fill(mock.move, mockNum)
@@ -56,7 +56,7 @@ class TTTInteract:
 
 class nimInteract:
     
-    def interact(self, board, current, mock, depth, rules):
+    def interact(self, board, current, mock, depth, rules, isRec = False):
     #if something bad happens, return "change"
     #else return "okay"
 
@@ -76,7 +76,7 @@ class nimInteract:
                 current.change = False
                 return False
             
-            mock.move = mock.getMove(board, rules)
+            mock.move = mock.getMove(board, rules, isRec = isRec)
             
             board.fill(mock.move)
 
