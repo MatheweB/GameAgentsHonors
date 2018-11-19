@@ -21,16 +21,6 @@ class Mocker:
                 
         else:
             print("INVALID MOVE ERROR in getMove MockAgent")
-
-
-    def makeSmartMoveNim(self, validMoves, board, rules): #TOO SMART
-        smartArray= []
-        for move in validMoves:
-            nimVal = rules.getNimVal(board, move)
-            smartArray.append([nimVal, move])
-            
-        smartArray.sort(key=operator.itemgetter(0))
-        return smartArray[0][1]
         
 
     def makeSmartMove(self, validMoves, board, rules, playerNum = None, mockNum = None, isRec = False):
@@ -40,9 +30,9 @@ class Mocker:
         if playerNum == None and mockNum == None:
             for move in validMoves:
                 result = rules.goodMove(board, move, isRec = isRec)
-                if result == "won":
+                if result == True:
                     wonMoves.append(move)
-                elif result == "neutral":
+                elif result == False:
                     neutralMoves.append(move)
 
         else:

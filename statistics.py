@@ -168,17 +168,23 @@ class StatMachine:
 
         
         if len(certainList) > 0:
+            isCert = None
+            
             for item in sortedList:
                 if item[2] == "won":
+                    isCert = "won"
                     wList.append(item)
                 elif item[2] == "tied":
+                    isCert = "tied"
                     tList.append(item)
                 elif item[2] == "neutral":
+                    isCert = "neutral"
                     nList.append(item)
                 else:
+                    isCert = "lost"
                     lList.append(item)
             totalList = wList + tList + nList + lList
-            return totalList
+            return totalList, isCert
             
             
-        return sortedList
+        return sortedList, False #not certain that I won

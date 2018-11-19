@@ -93,66 +93,68 @@ class Nim:
 
     def nimWin(self, board, move, isRec):
 
-        if isRec:           
-            testB = copy.deepcopy(board)
-            testB.fill(move)
+        #if isRec:           
+        testB = copy.deepcopy(board)
+        testB.fill(move)
 
-            justWon = True
-            for item in testB.tiles:
-                if item != 0:
-                    justWon = False
+        justWon = True
+        for item in testB.tiles:
+            if item != 0:
+                justWon = False
 
-            #return justWon
+        return justWon
 
-                
-            if justWon == True:
-                return True
-            else:
-                count = 0
-                for item in testB.tiles:
-                    if item != 0:
-                        count += 1
-                        
-                if count%2 != 0:
-                    return False
-                
-                else:
-                    return True
-        else:
-            simRunner = Sim.runSim()
             
-            gameRules = Nim()
-            thisBoard = copy.deepcopy(board)
-
-            numAgents = 1
-            simNum = 1
-            depth = 200
+##        if justWon == True:
+##            return True
+##        
+##        else:
+##            count = 0
+##            for item in testB.tiles:
+##                if item != 0:
+##                    count += 1
+##                    
+##            if count%2 != 0:
+##                return False
+##            
+##            else:
+##                return True
             
-            turnNum = 2
-            done = None
-            
-            for x in range(0, turnNum):
-                if x == 0:
-                    thisBoard.fill(move)
-                    if self.win(thisBoard):
-                        return "won"
-                else:
-                    newBoard, bestMoves, done = simRunner.run_indiff(numAgents, simNum, Nim(), thisBoard, depth, isRec = True, printStuff = False)
-                    thisBoard = newBoard
-                    
-                    if bestMoves[0][2] == "lost":
-                        return "lost"                    
-                    if done == True:
-                        return "won"
-
-                newBoard, bestMoves, done = simRunner.run_indiff(numAgents, simNum, Nim(), thisBoard, depth, isRec = True, printStuff = False)
-                thisBoard = newBoard
-                if bestMoves[0][2] == "lost":
-                    return "won" 
-                if done == True:
-                    return "lost"
-
-            return "neutral"
+##        else:
+##            simRunner = Sim.runSim()
+##            
+##            gameRules = Nim()
+##            thisBoard = copy.deepcopy(board)
+##
+##            numAgents = 1
+##            simNum = 1
+##            depth = 200
+##            
+##            turnNum = 2
+##            done = None
+##            
+##            for x in range(0, turnNum):
+##                if x == 0:
+##                    thisBoard.fill(move)
+##                    if self.win(thisBoard):
+##                        return "won"
+##                else:
+##                    newBoard, bestMoves, done = simRunner.run_indiff(numAgents, simNum, Nim(), thisBoard, depth, isRec = True, printStuff = False)
+##                    thisBoard = newBoard
+##                    
+##                    if bestMoves[0][2] == "lost":
+##                        return "lost"                    
+##                    if done == True:
+##                        return "won"
+##
+##                newBoard, bestMoves, done, isCert = simRunner.run_indiff(numAgents, simNum, Nim(), thisBoard, depth, isRec = True, printStuff = False)
+##                thisBoard = newBoard
+##                if bestMoves[0][2] == "lost":
+##                    return "won" 
+##                if done == True:
+##                    return "lost"
+##
+##            return "neutral"
 
 
     def getNimVal(self, board, move):

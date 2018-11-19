@@ -35,7 +35,7 @@ class runSim:
             else:
                 win = False
                 
-            return newBoard, None, win
+            return newBoard, None, win, "userUpdate"
 
         else:
         
@@ -60,7 +60,7 @@ class runSim:
 
                 agents = simulator.changeAgents(agentsList, board, gameRules, None) #topMoves[0][1]) #topMove endpoint in agent.py
                 
-            topMoves = statMachine.highestStats(overallStats, printStuff)
+            topMoves, isCert = statMachine.highestStats(overallStats, printStuff)
 
             newBoard = copy.deepcopy(board)
             
@@ -71,7 +71,7 @@ class runSim:
             else:
                 done = False
 
-            return newBoard, topMoves, done
+            return newBoard, topMoves, done, isCert
         
 
     def run_norm(self, numAgents, simNum, gameRules, board, depth, playerNum, mockNum, userUpdate = False, isRec = False, printStuff = True):
@@ -96,7 +96,7 @@ class runSim:
                 playerNum = "2"
                 mockNum = "1"
             
-            return newBoard, None, done, playerNum, mockNum
+            return newBoard, None, done, playerNum, mockNum, "userUpdate"
 
         else:
         
@@ -122,7 +122,7 @@ class runSim:
 
                 agentsList = simulator.changeAgents(agentsList, board, gameRules, None) #topMoves[0][1]) #topMove endpoint in agent.py
                 
-            topMoves = statMachine.highestStats(overallStats, printStuff)
+            topMoves, isCert = statMachine.highestStats(overallStats, printStuff)
 
             newBoard = copy.deepcopy(board)
             
@@ -144,4 +144,4 @@ class runSim:
                 playerNum = "2"
                 mockNum = "1"
 
-            return newBoard, topMoves, done, playerNum, mockNum
+            return newBoard, topMoves, done, playerNum, mockNum, isCert
