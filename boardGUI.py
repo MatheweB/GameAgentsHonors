@@ -10,16 +10,16 @@ import runSim as Sim
 def main():
     simRunner = Sim.runSim()
     
-    gameRules = Rules.Nim()  # Rules.TTT() #
-    OGBoard = Board.NimBoard([1,5,5]) #Board.TTTBoard() #
+    gameRules = Rules.TTT() #Rules.Nim()  # 
+    OGBoard = Board.TTTBoard() #Board.NimBoard([1,5,5]) #
     board = copy.deepcopy(OGBoard)
 
     playFirst = False
     playSecond = True
     userUpdate = False
 
-    numAgents = 250
-    simNum = 150
+    numAgents = 100
+    simNum = 100
     depth = 200
     
     gameNum = 20
@@ -50,35 +50,9 @@ def main():
                     board = newBoard
 
                 else:
+                    print(isCert)
                     board.fill(topMoves[0][1])
-
-##                elif isCert == "won":
-##                    board = newBoard
-
-##                else:
-##                    topBoi = []
-##                    cert = []
-##                    for x in range(0,len(topMoves)):
-##                        newBoard = copy.deepcopy(board)
-##                        newBoard.fill(topMoves[x][1])
-##                        predBoard, nextTop, nextDone, isCert = simRunner.run_indiff(numAgents, simNum, gameRules, copy.deepcopy(newBoard), depth, userUpdate)
-##                        if isCert == "lost":
-##                            cert.append(topMoves[x][1])
-##                        else:
-##                            topBoi.append([nextTop[0][0], topMoves[x][1]])
-##
-##                    if len(cert) > 0:
-##                        board.fill(cert[0])
-##                    else:
-##                        maxVal = topBoi[0][0]
-##                        maxMove = topBoi[0][1]
-##                        for move in topBoi:
-##                            if move[0] < maxVal:
-##                                maxVal = move[0]
-##                                maxMove = move[1]
-##                            
-##                        board.fill(maxMove) #THIS MIGHT NOT WORK BECAUSE IT MAKES DUMB MOVES WITH 0% WIN RATE TO SOME HIGH(ER) WINRATE. TRY TOTAL POSI CHANGE
-
+                    
                 if topMoves != None:
                     print(topMoves)
 
@@ -113,41 +87,12 @@ def main():
                 newBoard, topMoves, done, enemyAgent, enemyMock, isCert = simRunner.run_norm(numAgents, simNum, gameRules, board, depth, agentNum, mockNum, userUpdate)
 
                 if userUpdate == True:
-                    
                     board = newBoard
                     
-                elif isCert == "won":
-                    board = newBoard
-
                 else:
-                    topBoi = []
-                    cert = []
-
-                    
-                    for x in range(0,len(topMoves)):
-                        newBoard = copy.deepcopy(board)
-                        newBoard.fill(topMoves[x][1], mockNum)
-                        predBoard, nextTop, nextDone, _, _, isCert = simRunner.run_norm(numAgents, simNum, gameRules, copy.deepcopy(newBoard), depth, enemyAgent, enemyMock, userUpdate)
-                        if isCert == "lost":
-                            cert.append(topMoves[x][1])
-                        else:
-                            topBoi.append([nextTop[0][0], topMoves[x][1]])
-
-                    if len(cert) > 0:
-                        board.fill(cert[0], agentNum)
-                        
-                    else:
-                        maxVal = topBoi[0][0]
-                        maxMove = topBoi[0][1]
-                        for move in topBoi:
-                            if move[0] < maxVal:
-                                maxVal = move[0]
-                                maxMove = move[1]
-                        print(topBoi)
-                            
-                        board.fill(maxMove, agentNum) #THIS MIGHT NOT WORK BECAUSE IT MAKES DUMB MOVES WITH 0% WIN RATE TO SOME HIGH(ER) WINRATE. TRY TOTAL POSI CHANGE
-
-                
+                    print(isCert)
+                    board.fill(topMoves[0][1], agentNum)
+               
                 print(topMoves)
                 print(agentNum)
                 print(done)

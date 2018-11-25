@@ -56,11 +56,12 @@ class runSim:
                 agentsList = completed + newAgents
                 
                 stats, moveDict = statMachine.getStats(agentsList)
+
                 overallStats, overallMoves = statMachine.sumStats(stats, moveDict, overallStats, overallMoves)
                 
-                topMoves = statMachine.highestStats(overallStats, False)
-
-                agents = simulator.changeAgents(agentsList, board, gameRules, topMoves[len(topMoves-1)][1]) #topMove endpoint in agent.py
+                topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, False)
+                
+                agents = simulator.changeAgents(agentsList, board, gameRules, topMoves[len(topMoves)-1][1]) #topMove endpoint in agent.py
                 
             topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, printStuff)
 
@@ -122,9 +123,9 @@ class runSim:
                 stats, moveDict = statMachine.getStats(agentsList)
                 overallStats, overallMoves = statMachine.sumStats(stats, moveDict, overallStats, overallMoves)
                 
-                #topMoves = statMachine.highestStats(overallStats, False)
+                topMoves, isCert = statMachine.highestStats(overallStats, False)
 
-                agentsList = simulator.changeAgents(agentsList, board, gameRules, None) #topMoves[0][1]) #topMove endpoint in agent.py
+                agentsList = simulator.changeAgents(agentsList, board, gameRules, topMoves[len(topMoves)-1][1]) #topMove endpoint in agent.py
                 
             topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, printStuff)
 

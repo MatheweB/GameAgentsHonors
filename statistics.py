@@ -1,5 +1,8 @@
 import operator
 import ast
+import copy
+
+doTheRatio = True
 
 class StatMachine:
     
@@ -11,11 +14,9 @@ class StatMachine:
             agentMove = str(agent.coreMove)
             
             if agent.didLose:
-                
                 addWord = "lost"
                 addNum = 1
             elif agent.didWin:
-                
                 addWord = "won"
                 addNum = 1
             elif agent.neutral:
@@ -25,7 +26,6 @@ class StatMachine:
                 addNum = 1
                 addWord = "tied"
                 
-
             if addWord not in myDict.keys():
                 myDict[addWord] = {}
                 
@@ -33,18 +33,19 @@ class StatMachine:
                 myDict[addWord][agentMove] = addNum
             else:
                 myDict[addWord][agentMove] += addNum
+                
 
             #if agent.didWin:
-            if str(agentMove) not in moveDict:
-                moveDict[str(agentMove)] = 1
+            if agentMove not in moveDict:
+                moveDict[agentMove] = 1
             else:
-                moveDict[str(agentMove)] += 1
+                moveDict[agentMove] += 1
 
         return myDict, moveDict
     
 
     def sumStats(self, stats, moves, overallStats, overallMoves):
-        
+
         for key in stats.keys():
             
             if key not in overallStats:
@@ -53,11 +54,13 @@ class StatMachine:
             for move in stats[key]:
                 if move not in overallStats[key]:
                     overallStats[key][move] = stats[key][move]
+                    
                 else:
                     overallStats[key][move] += stats[key][move]
+
                     
         for key in moves.keys():
-            if key not in overallMoves:
+            if key not in overallMoves.keys():
                 overallMoves[key] = moves[key]
             else:
                 overallMoves[key] += moves[key]
@@ -73,6 +76,7 @@ class StatMachine:
 
 
     def highestStats(self, overall, moveDict, printStuff = False):
+        
         high = []
         
         lostList = []
@@ -119,28 +123,20 @@ class StatMachine:
 
         foundItem = False #If all "lost"
 
-        for x in range(0,1): #LOSS CORRECTED 1st PASS - THEN CALCULATING WIN PERCENT VS TIE
-            if x == 0:
-                blackListed = "lost"
-                myList = lostList
-                
-            for item in overall:
-                if item != blackListed and item != "lost":
-                    if blackListed == "lost":
-                        foundItem = True
-                    for move in myList: #Scale down scenarios to prevent losses
-                        
-                        moveString = str(move[1])
-                        if moveString in overall[item].keys():
-                            if int(overall[item][moveString]) > 0:
-                                ratio = move[0]/overall[item][moveString]
+        newOverall = copy.deepcopy(overall)               
+        for item in newOverall:
+            if item != "lost":
+                foundItem = True
+                for move in lostList: #Scale down scenarios to prevent losses
+                    moveString = str(move[1])
+                    if moveString in newOverall[item].keys():
+                        if int(newOverall[item][moveString]) > 0:
+                            ratio = move[0]/newOverall[item][moveString]
+                            if doTheRatio == True:
                                 if (ratio) > confidence:
-                                    overall[item][moveString] = round(overall[item][moveString]/ratio,4)
-                                
-                                    
-            
-        
-        for item in overall.items():
+                                    newOverall[item][moveString] = round(newOverall[item][moveString]/ratio,4)
+       
+        for item in newOverall.items():
             status = item[0]
             moveList = item[1]
             for move in moveList:
@@ -170,28 +166,7 @@ class StatMachine:
                 
         for item in unsortedDict.items():
             finalList.append(item[1])
-
-        lowest = None
-        highest = None
-
-        for item in moveDict.items():
-            if lowest == None and highest == None:
-                lowest = item[1]
-                highest = item[1]
-            else:
-                if item[1] < lowest:
-                    lowest = item[1]
-
-                if item[1] > highest:
-                    highest = item[1]
-                    
-
-        for item in finalList:
-            print(item,lowest)
-            if str(item[1]) in moveDict:
-                item[0] = item[0]*((item[0]/moveDict[str(item[1])]))
             
-
         if foundItem == False:
             sortedList = sorted(finalList, key=operator.itemgetter(0), reverse = False)
         else:
@@ -221,6 +196,5 @@ class StatMachine:
                     lList.append(item)
             totalList = wList + tList + nList + lList
             return totalList, isCert
-            
             
         return sortedList, False #not certain that I won
