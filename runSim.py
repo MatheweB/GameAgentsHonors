@@ -47,20 +47,22 @@ class runSim:
             agentsList = self.initAgents(numAgents)
 
             overallStats = {}
+            overallMoves = {}
+            
             topMoves = None
 
             for x in range (0,simNum):
                 newAgents, completed = simulator.matchAgents(agentsList, copy.deepcopy(board), depth, gameRules, isRec = isRec)
                 agentsList = completed + newAgents
                 
-                stats = statMachine.getStats(agentsList)
-                overallStats = statMachine.sumStats(stats, overallStats)
+                stats, moveDict = statMachine.getStats(agentsList)
+                overallStats, overallMoves = statMachine.sumStats(stats, moveDict, overallStats, overallMoves)
                 
-                #topMoves = statMachine.highestStats(overallStats, False)
+                topMoves = statMachine.highestStats(overallStats, False)
 
-                agents = simulator.changeAgents(agentsList, board, gameRules, None) #topMoves[0][1]) #topMove endpoint in agent.py
+                agents = simulator.changeAgents(agentsList, board, gameRules, topMoves[len(topMoves-1)][1]) #topMove endpoint in agent.py
                 
-            topMoves, isCert = statMachine.highestStats(overallStats, printStuff)
+            topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, printStuff)
 
             newBoard = copy.deepcopy(board)
             
@@ -108,6 +110,8 @@ class runSim:
             agentsList = self.initAgents(numAgents)
 
             overallStats = {}
+            overallMoves = {}
+            
             topMoves = None
 
             
@@ -115,14 +119,14 @@ class runSim:
                 newAgents, completed = simulator.matchAgents(agentsList, copy.deepcopy(board), depth, gameRules, playerNum, mockNum, isRec = isRec)
                 agentsList = completed + newAgents
                 
-                stats = statMachine.getStats(agentsList)
-                overallStats = statMachine.sumStats(stats, overallStats)
+                stats, moveDict = statMachine.getStats(agentsList)
+                overallStats, overallMoves = statMachine.sumStats(stats, moveDict, overallStats, overallMoves)
                 
                 #topMoves = statMachine.highestStats(overallStats, False)
 
                 agentsList = simulator.changeAgents(agentsList, board, gameRules, None) #topMoves[0][1]) #topMove endpoint in agent.py
                 
-            topMoves, isCert = statMachine.highestStats(overallStats, printStuff)
+            topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, printStuff)
 
             newBoard = copy.deepcopy(board)
             

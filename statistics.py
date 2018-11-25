@@ -5,6 +5,7 @@ class StatMachine:
     
     def getStats(self, agentList):
         myDict = {}
+        moveDict = {}
 
         for agent in agentList:
             agentMove = str(agent.coreMove)
@@ -32,11 +33,17 @@ class StatMachine:
                 myDict[addWord][agentMove] = addNum
             else:
                 myDict[addWord][agentMove] += addNum
-                
 
-        return myDict
+            #if agent.didWin:
+            if str(agentMove) not in moveDict:
+                moveDict[str(agentMove)] = 1
+            else:
+                moveDict[str(agentMove)] += 1
 
-    def sumStats(self, stats, overallStats):
+        return myDict, moveDict
+    
+
+    def sumStats(self, stats, moves, overallStats, overallMoves):
         
         for key in stats.keys():
             
@@ -48,8 +55,14 @@ class StatMachine:
                     overallStats[key][move] = stats[key][move]
                 else:
                     overallStats[key][move] += stats[key][move]
+                    
+        for key in moves.keys():
+            if key not in overallMoves:
+                overallMoves[key] = moves[key]
+            else:
+                overallMoves[key] += moves[key]
 
-        return overallStats
+        return overallStats, overallMoves
 
     def arrayify(self, myString):
         return ast.literal_eval(myString)
@@ -59,7 +72,7 @@ class StatMachine:
         pass
 
 
-    def highestStats(self, overall, printStuff = False):
+    def highestStats(self, overall, moveDict, printStuff = False):
         high = []
         
         lostList = []
@@ -143,6 +156,8 @@ class StatMachine:
                     if status != "lost" or foundItem == False:
                         unsortedList.append([moveList[move], self.arrayify(move), status])
 
+        
+
 
         
         for item in unsortedList: #Get the most numerous tie/win scenarios
@@ -155,6 +170,27 @@ class StatMachine:
                 
         for item in unsortedDict.items():
             finalList.append(item[1])
+
+        lowest = None
+        highest = None
+
+        for item in moveDict.items():
+            if lowest == None and highest == None:
+                lowest = item[1]
+                highest = item[1]
+            else:
+                if item[1] < lowest:
+                    lowest = item[1]
+
+                if item[1] > highest:
+                    highest = item[1]
+                    
+
+        for item in finalList:
+            print(item,lowest)
+            if str(item[1]) in moveDict:
+                item[0] = item[0]*((item[0]/moveDict[str(item[1])]))
+            
 
         if foundItem == False:
             sortedList = sorted(finalList, key=operator.itemgetter(0), reverse = False)
