@@ -10,16 +10,16 @@ import runSim as Sim
 def main():
     simRunner = Sim.runSim()
     
-    gameRules = Rules.TTT() #Rules.Nim()  # 
-    OGBoard = Board.TTTBoard() #Board.NimBoard([1,5,5]) #
+    gameRules = Rules.Nim()  # Rules.TTT() #
+    OGBoard = Board.NimBoard([1,2,3,4]) #Board.TTTBoard() #
     board = copy.deepcopy(OGBoard)
 
     playFirst = False
     playSecond = True
     userUpdate = False
 
-    numAgents = 100
-    simNum = 100
+    numAgents = 800
+    simNum = 30
     depth = 200
     
     gameNum = 20
