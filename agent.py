@@ -15,6 +15,8 @@ class Agent:
 
         self.neutral = False
 
+        self.moveNum = 0
+
     def getMove(self, board, rules):
         
         validMoves = rules.validMoves(board)
@@ -26,6 +28,10 @@ class Agent:
         else:
             print("INVALID MOVE ERROR in getMove")
 
+    def getMoveItem(self):
+        return [str(self.coreMove), self.moveNum]
+    
+
     def makeChanges(self, board, rules, topMove):
             
         if self.change == True:
@@ -33,8 +39,10 @@ class Agent:
                 self.coreMove = topMove
             else:
                 self.coreMove = self.getMove(board, rules)
-        
-            
+                
+        self.moveNum = 0
         self.change = False
+        
         self.move = None
+        return self.moveNum
 

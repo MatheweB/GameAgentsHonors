@@ -12,6 +12,19 @@ class Simulator:
             agent.neutral = False
         return agents
 
+    def getMoveList(self, agents, moveDict):
+        for agent in agents:
+            if agent.moveNum != False:
+                
+                move = agent.getMoveItem() #0 = move, 1 = movenum
+                if move[0] not in moveDict:
+                    moveDict[move[0]] = [move[1], 1]
+                else:
+                    moveDict[move[0]][0] += move[1]
+                    moveDict[move[0]][1] += 1
+        return moveDict
+    
+
     def changeAgents(self, agents, board, rules, topMove):
         for agent in agents:
             agent.makeChanges(board, rules, topMove)

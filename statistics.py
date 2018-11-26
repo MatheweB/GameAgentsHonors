@@ -75,7 +75,7 @@ class StatMachine:
         pass
 
 
-    def highestStats(self, overall, moveDict, printStuff = False):
+    def highestStats(self, overall, moveDict, overallMoveNums, printStuff = False):
         
         high = []
         
@@ -151,21 +151,39 @@ class StatMachine:
                 else:
                     if status != "lost" or foundItem == False:
                         unsortedList.append([moveList[move], self.arrayify(move), status])
+        
 
         
 
+        #normalize by moveNum
+        highestMoves = None
+        lowestMoves = None
 
+        avgMoveNum = 0
         
+        for item in overallMoveNums.items():
+            avgMoves = item[1][0]/item[1][1]
+            avgMoveNum += avgMoves
+                    
+        avgMoveNum /= len(overallMoveNums.items())
+           
+        for item in unsortedList:
+            avgMoves = overallMoveNums[str(item[1])][0]/overallMoveNums[str(item[1])][1]
+            if avgMoves != 0:
+                item[0] = item[0]*(avgMoveNum/(avgMoveNum + abs(avgMoves-avgMoveNum)))
+
+            
         for item in unsortedList: #Get the most numerous tie/win scenarios
             if str(item[1]) not in unsortedDict:
                 unsortedDict[str(item[1])] = item
             else:
                 if item[0] > unsortedDict[str(item[1])][0]:
                     unsortedDict[str(item[1])] = item
-                    
-                
+
+
         for item in unsortedDict.items():
             finalList.append(item[1])
+
             
         if foundItem == False:
             sortedList = sorted(finalList, key=operator.itemgetter(0), reverse = False)

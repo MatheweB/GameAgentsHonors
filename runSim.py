@@ -2,6 +2,7 @@ import copy
 import simulation as sim
 import statistics as stat
 import agent
+import random
 
 class runSim:
     
@@ -48,6 +49,7 @@ class runSim:
 
             overallStats = {}
             overallMoves = {}
+            overallMoveNums = {}
             
             topMoves = None
 
@@ -59,11 +61,13 @@ class runSim:
 
                 overallStats, overallMoves = statMachine.sumStats(stats, moveDict, overallStats, overallMoves)
                 
-                topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, False)
-                
+                overallMoveNums = simulator.getMoveList(agentsList, overallMoveNums)
+
+                topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, False)
+
                 agents = simulator.changeAgents(agentsList, board, gameRules, topMoves[len(topMoves)-1][1]) #topMove endpoint in agent.py
-                
-            topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, printStuff)
+                    
+            topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, printStuff)
 
             newBoard = copy.deepcopy(board)
             
@@ -112,6 +116,7 @@ class runSim:
 
             overallStats = {}
             overallMoves = {}
+            overallMoveNums = {}
             
             topMoves = None
 
@@ -122,12 +127,14 @@ class runSim:
                 
                 stats, moveDict = statMachine.getStats(agentsList)
                 overallStats, overallMoves = statMachine.sumStats(stats, moveDict, overallStats, overallMoves)
+
+                overallMoveNums = simulator.getMoveList(agentsList, overallMoveNums)
                 
-                topMoves, isCert = statMachine.highestStats(overallStats, False)
+                topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, False)
 
                 agentsList = simulator.changeAgents(agentsList, board, gameRules, topMoves[len(topMoves)-1][1]) #topMove endpoint in agent.py
                 
-            topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, printStuff)
+            topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, printStuff)
 
             newBoard = copy.deepcopy(board)
             
@@ -138,6 +145,7 @@ class runSim:
                 
             elif gameRules.tie(newBoard):
                 done = "tie"
+                
             else:
                 done = "neutral"
                 
