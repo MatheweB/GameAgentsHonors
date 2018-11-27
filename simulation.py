@@ -14,14 +14,32 @@ class Simulator:
 
     def getMoveList(self, agents, moveDict):
         for agent in agents:
-            if agent.moveNum != False:
-                
+            if agent.didWin == True:
                 move = agent.getMoveItem() #0 = move, 1 = movenum
                 if move[0] not in moveDict:
-                    moveDict[move[0]] = [move[1], 1]
+                    moveDict[move[0]] = {}
+                    
+                if "won" not in moveDict[move[0]]:
+                    moveDict[move[0]]["won"] = {}
+
+                if move[1] not in moveDict[move[0]]["won"]:
+                    moveDict[move[0]]["won"][move[1]] = 1
                 else:
-                    moveDict[move[0]][0] += move[1]
-                    moveDict[move[0]][1] += 1
+                    moveDict[move[0]]["won"][move[1]] += 1
+                    
+            elif agent.didLose == True:
+                move = agent.getMoveItem() #0 = move, 1 = movenum
+                if move[0] not in moveDict:
+                    moveDict[move[0]] = {}
+                    
+                if "lost" not in moveDict[move[0]]:
+                    moveDict[move[0]]["lost"] = {}
+
+                if move[1] not in moveDict[move[0]]["lost"]:
+                    moveDict[move[0]]["lost"][move[1]] = 1
+                else:
+                    moveDict[move[0]]["lost"][move[1]] += 1
+
         return moveDict
     
 

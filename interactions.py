@@ -86,12 +86,12 @@ class nimInteract:
                 current.didLose = True
                 current.didWin = False
                 current.change = True
-                current.moveNum = False
+                current.moveNum = moves
                 return False
             
             current.move = current.getMove(board, rules)
 
         current.neutral = True
         current.change = True
-        current.moveNum = False
+        current.moveNum = moves
         return True
