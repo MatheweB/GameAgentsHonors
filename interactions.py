@@ -70,6 +70,7 @@ class nimInteract:
         moves = 0
         for x in range(0,depth):
             board.fill(current.move)
+            moves += 1
 
             if rules.win(board):
                 current.didLose = False
@@ -80,7 +81,6 @@ class nimInteract:
             
             mock.move = mock.getMove(board, rules, isRec = isRec)
             board.fill(mock.move)
-            moves += 1
 
             if rules.win(board):
                 current.didLose = True

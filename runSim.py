@@ -64,7 +64,7 @@ class runSim:
                 
                 overallMoveNums = simulator.getMoveList(agentsList, overallMoveNums)
 
-                topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, False)
+                #topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, False)
 
                 agents = simulator.changeAgents(agentsList, board, gameRules, None) #topMoves[0][1]) #topMove endpoint in agent.py
 

@@ -171,18 +171,24 @@ class StatMachine:
 
                         try:
                             lostNum = overallMoveNums[move]["lost"][move_num]
+                            #do = True
                             
                         except:
                             lostNum = 0
+                            #do = False
 
-
+                        #if do:
                         wonNum = overallMoveNums[move][status][move_num]
+
+                        percentage = (wonNum/(wonNum+lostNum))
+                        if lostNum == 0:
+                            percentage = 0
 
                         if move not in highList:
                             highList[move] = {}
-                            highList[move][move_num] = (wonNum - lostNum)/wonNum
+                            highList[move][move_num] = percentage
                         else:
-                            highList[move][move_num] = (wonNum - lostNum)/wonNum
+                            highList[move][move_num] = percentage #FIXIXIXIXIXIXIXIXIXIXIXIXIX
 
         listOfMoves = []
 
@@ -221,28 +227,31 @@ class StatMachine:
                         overallRank[myMove] = [0, 0] #["good points (lower=better)", number of move_num that it has been in]
 
                     if moveRatio == highestItem[0]:
-                        overallRank[myMove][0] += highestItem[1]/maxRank
+                        overallRank[myMove][0] += moveRatio * (highestItem[1]/maxRank)
                         overallRank[myMove][1] += 1
                         rankNum -= 1
                         
                     elif moveRatio < highestItem[0]:
                         rankNum -= 1
                         highestItem = moveRatio, rankNum
-                        overallRank[myMove][0] += rankNum/maxRank
+                        overallRank[myMove][0] += moveRatio * (rankNum/maxRank)
                         overallRank[myMove][1] += 1
+        print(overallRank)
+        print()
+        print(overallMoveNums)
+        exit(5)
+            
 
+
+        
 
         bestMove = None
         for movestring in overallRank.keys():
             if bestMove == None:
-                bestMove = [movestring, overallRank[movestring][0]]
+                bestMove = [movestring, (overallRank[movestring][0]/overallRank[movestring][1])]
 
-            elif overallRank[movestring][0] > bestMove[1]:
-                bestMove = [movestring, overallRank[movestring][0]]
-
-        
-        
-
+            elif (overallRank[movestring][0]/overallRank[movestring][1]) > bestMove[1]:
+                bestMove = [movestring, (overallRank[movestring][0]/overallRank[movestring][1])]
 
         if bestMove[0] not in bestMoveDict.keys():
             bestMoveDict[bestMove[0]] = 1
@@ -257,11 +266,12 @@ class StatMachine:
 
         #print(bestMoveDict)
         
-        if printStuff:               
+        if printStuff:
             print('-------------------')
+            print(highList)
             print()
             print("BEST MOVES ARE:", bestMoves)
-            print(bestMoveDict)
+            print("BEST MOVE DICT IS:", bestMoveDict)
             print()
             print("BEST MOVE IS:", bestMoveString)
             print()
