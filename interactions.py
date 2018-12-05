@@ -21,6 +21,7 @@ class TTTInteract:
             if rules.win(board, agentNum):
                 current.didLose = False
                 current.didWin = True
+                current.change = False
                 current.moveNum = moves
                 return False
             
