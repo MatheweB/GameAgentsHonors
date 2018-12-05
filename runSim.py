@@ -64,12 +64,12 @@ class runSim:
                 
                 overallMoveNums = simulator.getMoveList(agentsList, overallMoveNums)
 
-                #topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, False)
+                #topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, "indiff", False)
 
                 agents = simulator.changeAgents(agentsList, board, gameRules, None)#topMoves[len(topMoves)-1][1]) #topMove endpoint in agent.py
 
                     
-            topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, printStuff)
+            topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, "indiff", printStuff)
 
             newBoard = copy.deepcopy(board)
             
@@ -133,11 +133,11 @@ class runSim:
 
                 overallMoveNums = simulator.getMoveList(agentsList, overallMoveNums)
                 
-                #topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, False)
+                #topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, "norm", False)
 
                 agentsList = simulator.changeAgents(agentsList, board, gameRules, None)#topMoves[len(topMoves)-1][1]) #topMove endpoint in agent.py
                 
-            topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, printStuff)
+            topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, "norm", printStuff)
 
             newBoard = copy.deepcopy(board)
             

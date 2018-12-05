@@ -76,7 +76,7 @@ class StatMachine:
         pass
 
 
-    def highestStats(self, overall, moveDict, overallMoveNums, bestMoveDict, printStuff = False):
+    def highestStats(self, overall, moveDict, overallMoveNums, bestMoveDict, gameType, printStuff = False):
 
         #print(moveDict)
         
@@ -200,33 +200,7 @@ class StatMachine:
 
         bestMoves = []
         overallRank = {}
-        
-##        for x in range(0, len(listOfMoves)):
-##            if listOfMoves[x] != []:
-##                
-##                sortedMoveList = listOfMoves[x]
-##                maxRank = len(sortedMoveList)
-##                highestItem = [listOfMoves[x][0][0], maxRank]
-##                
-##                rankNum = maxRank+1
-##                
-##                for moveItem in sortedMoveList:
-##                    myMove = moveItem[1]
-##                    moveRatio = moveItem[0]
-##
-##                    if myMove not in overallRank:
-##                        overallRank[myMove] = [0, 0] #["good points (lower=better)", number of move_num that it has been in]
-##
-##                    if moveRatio == highestItem[0]:
-##                        overallRank[myMove][0] += moveRatio * (highestItem[1]/maxRank)
-##                        overallRank[myMove][1] += 1
-##                        rankNum -= 1
-##                        
-##                    elif moveRatio < highestItem[0]:
-##                        rankNum -= 1
-##                        highestItem = moveRatio, rankNum
-##                        overallRank[myMove][0] += moveRatio * (rankNum/maxRank)
-##                        overallRank[myMove][1] += 1
+
 
         itemRanks = {}
         for x in range(0, len(listOfMoves)):
@@ -247,61 +221,41 @@ class StatMachine:
         bestMove = None
         bestDictList = {}
         for item in itemRanks:
+
+            if itemRanks[item][0] == 1 and gameType == "norm":
+                ratio1 = 1
+                ratio2 = 0
+            else:
+                ratio1 = itemRanks[item][0]
+                ratio2 = itemRanks[item][1]
             
             if item not in bestDictList:
-                bestDictList[item] = (itemRanks[item][1] - itemRanks[item][0])
+                if gameType == "indiff":
+                    bestDictList[item] = (ratio2 - ratio1)
+                else:
+                    bestDictList[item] = (ratio2 + ratio1)
                 
             if bestMove == None:
-                bestMove = [item, (itemRanks[item][1] - itemRanks[item][0])]
+                if gameType == "indiff":
+                    bestMove = [item, (ratio2 - ratio1)]
+                else:
+                    bestMove = [item, (ratio2 + ratio1)]
+                    
             else:
-                if (itemRanks[item][1] - itemRanks[item][0]) > bestMove[1]:
-                    bestMove = [item, (itemRanks[item][1] - itemRanks[item][0])]
-
-
-## For doing the new thing
-##                    
-##        print(bestMove)
-##        print(itemRanks)
-##        print()
-##        print(highList)
-##        print(overallRank)
-##        print()
-##        print(overallMoveNums)
-##        exit(5)
-
-##                        
-##        print(overallRank)
-##        print()
-##        print(overallMoveNums)
-##        exit(5)
-##            
-
-
+                if gameType == "indiff":
+                    if (ratio2 - ratio1) > bestMove[1]:
+                        bestMove = [item, (ratio2 - ratio1)]
+                else:
+                    if (ratio2 + ratio1) > bestMove[1]:
+                        bestMove = [item, (ratio2 + ratio1)]
         
-
-##        bestMove = None
-##        for movestring in overallRank.keys():
-##            if bestMove == None:
-##                bestMove = [movestring, (overallRank[movestring][0]/overallRank[movestring][1])]
-##
-##            elif (overallRank[movestring][0]/overallRank[movestring][1]) > bestMove[1]:
-##                bestMove = [movestring, (overallRank[movestring][0]/overallRank[movestring][1])]
-##
-##        if bestMove[0] not in bestMoveDict.keys():
-##            bestMoveDict[bestMove[0]] = 1
-##            
-##        else:
-##            bestMoveDict[bestMove[0]] += 1
-
-        
-##        bestMoveString = str(sorted(bestMoveDict, key=bestMoveDict.__getitem__, reverse = True)[0])
         if bestMove == None:
-            bestMove = moveDict.keys()[random.randint(0,len(moveDict.keys())-1)]
+            for key in moveDict.keys():
+                bestMove = str(key)
+                break
+            
         bestMoveString = str(bestMove[0])
-        
 
-
-        #print(bestMoveDict)
         
         if printStuff:
             print('-------------------')
@@ -365,6 +319,7 @@ class StatMachine:
                     lList.append(item)
             totalList = wList + tList + nList + lList
             return totalList, isCert
+        
         if printStuff:
             print(overallMoveNums)
             print('-----')

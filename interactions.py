@@ -81,7 +81,7 @@ class nimInteract:
             if rules.win(board):
                 current.didLose = False
                 current.didWin = True
-                current.change = False
+                current.change = True
                 current.moveNum = moves
                 return False
             
@@ -91,7 +91,7 @@ class nimInteract:
             if rules.win(board):
                 current.didLose = True
                 current.didWin = False
-                current.change = True
+                current.change = False
                 current.moveNum = moves
                 return False
             
