@@ -3,6 +3,7 @@ import simulation as sim
 import statistics as stat
 import agent
 import random
+import mockAgent as mock
 
 class runSim:
     
@@ -52,10 +53,12 @@ class runSim:
             overallMoveNums = {}
             bestMoveDict = {}
             
+            mockAgent = mock.Mocker()
+            
             topMoves = None
 
             for x in range (0,simNum):
-                newAgents, completed = simulator.matchAgents(agentsList, copy.deepcopy(board), depth, gameRules, isRec = isRec)
+                newAgents, completed = simulator.matchAgents(agentsList, mockAgent, copy.deepcopy(board), depth, gameRules, isRec = isRec)
                 agentsList = completed + newAgents
                 
                 stats, moveDict = statMachine.getStats(agentsList)
@@ -66,9 +69,8 @@ class runSim:
 
                 #topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, "indiff", False)
 
-                agents = simulator.changeAgents(agentsList, board, gameRules, None)#topMoves[len(topMoves)-1][1]) #topMove endpoint in agent.py
-
-                    
+                agents = simulator.changeAgents(agentsList, board, gameRules, None)#topMoves[0][1]) #topMove endpoint in agent.py
+                
             topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, "indiff", printStuff)
 
             newBoard = copy.deepcopy(board)
@@ -84,7 +86,7 @@ class runSim:
         
 
     def run_norm(self, numAgents, simNum, gameRules, board, depth, playerNum, mockNum, userUpdate = False, isRec = False, printStuff = True):
-
+    
         if userUpdate == True:
             newBoard = copy.deepcopy(board)
             newBoard.userUpdate(playerNum)
@@ -120,12 +122,13 @@ class runSim:
             overallMoves = {}
             overallMoveNums = {}
             bestMoveDict = {}
+            mockAgent = mock.Mocker()
             
             topMoves = None
 
             
             for x in range (0,simNum):
-                newAgents, completed = simulator.matchAgents(agentsList, copy.deepcopy(board), depth, gameRules, playerNum, mockNum, isRec = isRec)
+                newAgents, completed = simulator.matchAgents(agentsList, mockAgent, copy.deepcopy(board), depth, gameRules, playerNum, mockNum, isRec = isRec)
                 agentsList = completed + newAgents
                 
                 stats, moveDict = statMachine.getStats(agentsList)
@@ -136,7 +139,7 @@ class runSim:
                 #topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, "norm", False)
 
                 agentsList = simulator.changeAgents(agentsList, board, gameRules, None)#topMoves[len(topMoves)-1][1]) #topMove endpoint in agent.py
-                
+                              
             topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, "norm", printStuff)
 
             newBoard = copy.deepcopy(board)

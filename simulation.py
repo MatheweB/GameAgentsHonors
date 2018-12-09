@@ -1,5 +1,4 @@
 import copy
-import mockAgent as MA
 import boardRules
 
 class Simulator:
@@ -48,12 +47,11 @@ class Simulator:
             agent.makeChanges(board, rules, topMove)
         return agents
 
-    def matchAgents(self, agents, initBoard, depth, rules, playerNum = None, mockNum = None, isRec = False): #divide list into those that go 1st and those that go 2nd
+    def matchAgents(self, agents, mockAgent, initBoard, depth, rules, playerNum = None, mockNum = None, isRec = False): #divide list into those that go 1st and those that go 2nd
 
         newAgents = []
         completed = []
-        
-        mockAgent = MA.Mocker()
+
         #agents = self.clearAgents(agents)
 
         while len(agents) != 0:

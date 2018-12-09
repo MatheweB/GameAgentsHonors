@@ -50,17 +50,10 @@ class TTT:
         newBoard.fill(move, playerNum)
         
         selfWon = self.win(newBoard, playerNum)
-        
-        #newBoard.fill(move, mockNum)
-        
-        #oppWon = self.win(newBoard, mockNum)
 
         if selfWon:
             return True
-        
-        #if oppWon:
-            #return True
-        
+
         else:
             return False
         

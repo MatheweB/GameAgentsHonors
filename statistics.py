@@ -42,6 +42,7 @@ class StatMachine:
             else:
                 moveDict[agentMove] += 1
 
+
         return myDict, moveDict
     
 
@@ -77,8 +78,6 @@ class StatMachine:
 
 
     def highestStats(self, overall, moveDict, overallMoveNums, bestMoveDict, gameType, printStuff = False):
-
-        #print(moveDict)
         
         high = []
         
@@ -174,7 +173,7 @@ class StatMachine:
                             #do = False
 
                         wonNum = overallMoveNums[move][status][move_num]
-
+                        
                         percentage = (wonNum/(wonNum+lostNum))
 
                         if move not in highList:
@@ -212,42 +211,42 @@ class StatMachine:
                     moveRatio = moveItem[0]
 
                     if myMove not in itemRanks:
-                        itemRanks[myMove] = [moveRatio, moveRatio]
+                        itemRanks[myMove] = [moveRatio, 1]
                         
                     else:
-                        if moveRatio > itemRanks[myMove][1]:
-                            itemRanks[myMove][1] = moveRatio
+                        if gameType == "norm":
+                            itemRanks[myMove][1] += 1
+                            itemRanks[myMove][0] += moveRatio
+
+                        else:
+                            if moveRatio > itemRanks[myMove][1]:
+                                itemRanks[myMove][1] = moveRatio
 
         bestMove = None
         bestDictList = {}
-        for item in itemRanks:
-
-            if itemRanks[item][0] == 1 and gameType == "norm":
-                ratio1 = 1
-                ratio2 = 0
-            else:
-                ratio1 = itemRanks[item][0]
-                ratio2 = itemRanks[item][1]
-            
+        for item in itemRanks:                
+            ratio1 = itemRanks[item][0]
+            ratio2 = itemRanks[item][1]
+        
             if item not in bestDictList:
                 if gameType == "indiff":
                     bestDictList[item] = (ratio2 - ratio1)
                 else:
-                    bestDictList[item] = (ratio2 + ratio1)
+                    bestDictList[item] = ratio1/ratio2
                 
             if bestMove == None:
                 if gameType == "indiff":
                     bestMove = [item, (ratio2 - ratio1)]
                 else:
-                    bestMove = [item, (ratio2 + ratio1)]
+                    bestMove = [item, ratio1/ratio2]
                     
             else:
                 if gameType == "indiff":
                     if (ratio2 - ratio1) > bestMove[1]:
                         bestMove = [item, (ratio2 - ratio1)]
                 else:
-                    if (ratio2 + ratio1) > bestMove[1]:
-                        bestMove = [item, (ratio2 + ratio1)]
+                    if ratio1/ratio2 > bestMove[1]:
+                        bestMove = [item, ratio1/ratio2]
         
         if bestMove == None:
             for key in moveDict.keys():

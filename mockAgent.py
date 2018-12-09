@@ -1,13 +1,14 @@
 import boardRules
 import random
 import operator
+import math
 
 class Mocker:
     def __init__(self):
         self.move = None #valid move based on board
+        
 
     def getMove(self, board, rules, playerNum = None, mockNum = None, isRec = False):
-
         
         validMoves = rules.validMoves(board)
 
@@ -18,10 +19,9 @@ class Mocker:
                 smartMove = (self.makeSmartMove(validMoves, board, rules, playerNum, mockNum, isRec = isRec))
                 
             return smartMove
-                
+        
         else:
             print("INVALID MOVE ERROR in getMove MockAgent")
-        
 
     def makeSmartMove(self, validMoves, board, rules, playerNum = None, mockNum = None, isRec = False):
         wonMoves = []

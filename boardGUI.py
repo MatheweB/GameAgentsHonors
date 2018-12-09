@@ -1,6 +1,7 @@
 import random
 import copy
 import operator
+
 import time
 
 
@@ -11,19 +12,19 @@ import runSim as Sim
 def main():
     simRunner = Sim.runSim()
     
-    gameRules = Rules.TTT() #Rules.Nim()  # 
-    OGBoard = Board.TTTBoard() #Board.NimBoard([1,5,5]) #
+    gameRules = Rules.TTT() #Rules.Nim()  #
+    OGBoard = Board.TTTBoard() #Board.NimBoard([3,4,4]) #
     board = copy.deepcopy(OGBoard)
 
-    playFirst = False
-    playSecond = True
+    playFirst = True
+    playSecond = False
     userUpdate = False
 
-    numAgents = 20
-    simNum = 20
+    numAgents = 50
+    simNum = 50
     depth = 100
     
-    gameNum = 20
+    gameNum = 200
 
     for game in range(0,gameNum):
 
