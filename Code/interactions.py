@@ -23,14 +23,14 @@ class TTTInteract:
             if rules.win(board, agentNum):
                 current.didLose = False
                 current.didWin = True
-                current.change = True
+                current.change = False
                 current.moveNum = moves
                 return False
             
             elif rules.tie(board):
                 current.didLose = False
                 current.didWin = False
-                current.change = False
+                current.change = True
                 current.moveNum = moves
                 return False
             mockMove = mock.getMove(board, rules, mockNum, agentNum, isRec = isRec)
@@ -40,21 +40,21 @@ class TTTInteract:
             if rules.win(board, mockNum):
                 current.didLose = True
                 current.didWin = False
-                current.change = False
+                current.change = True
                 current.moveNum = moves
                 return False
             
             elif rules.tie(board):
                 current.didLose = False
                 current.didWin = False
-                current.change = False
+                current.change = True
                 current.moveNum = moves
                 return False
             
             current.move = current.getMove(board, rules)
 
         current.neutral = True
-        current.change = False
+        current.change = True
         current.didLose = False
         current.didWin = False
         current.moveNum = moves

@@ -12,23 +12,27 @@ import runSim as Sim
 def main():
     simRunner = Sim.runSim()
     
-    gameRules = Rules.TTT() #Rules.Nim()  #
-    OGBoard = Board.TTTBoard() #Board.NimBoard([3,4,4]) #
+    gameRules = Rules.Nim()  #Rules.TTT() #
+    OGBoard = Board.NimBoard([1,2,3,4]) #Board.TTTBoard() #
     board = copy.deepcopy(OGBoard)
 
-    playFirst = True
-    playSecond = False
+    playFirst = False
+    playSecond = True
     userUpdate = False
 
-    numAgents = 50
-    simNum = 50
-    depth = 100
+    numAgents = 20 #220
+    simNum = 20 #220
+    depth = 40
     
     gameNum = 200
 
     for game in range(0,gameNum):
 
+
+
         if gameRules.is_indiff(): # An indifferent game
+            if playFirst:
+                board.printBoard()
 
             moveCount = 0
             done = False
@@ -52,11 +56,11 @@ def main():
                     board = newBoard
 
                 else:
-                    print(isCert)
+                    #print(isCert)
                     board.fill(topMoves[0][1])
                     
-                if topMoves != None:
-                    print(topMoves)
+                #if topMoves != None:
+                    #print(topMoves)
 
                 board.printBoard()
                 
@@ -66,6 +70,9 @@ def main():
             
 
         else: # A normal game
+
+            if playFirst:
+                board.printBoard()
             
             agentNum = "1"
             mockNum = "2"
@@ -92,12 +99,13 @@ def main():
                     board = newBoard
                     
                 else:
-                    print(isCert)
+                    #print(isCert)
                     board.fill(topMoves[0][1], agentNum)
                
-                print(topMoves)
-                print(agentNum)
-                print(done)
+                #print(topMoves)
+                print("Player: " + str(agentNum))
+                print()
+                #print(done)
                 agentNum = enemyAgent
                 mockNum = enemyMock
                 board.printBoard()

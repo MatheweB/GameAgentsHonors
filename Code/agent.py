@@ -47,4 +47,3 @@ class Agent:
         
         self.move = None
         return self.moveNum
-

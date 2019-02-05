@@ -27,6 +27,7 @@ class runSim:
 
 
     def run_indiff(self, numAgents, simNum, gameRules, board, depth, userUpdate = False, isRec = False, printStuff = True):
+        printStuff = False
 
         if userUpdate == True:
             newBoard = copy.deepcopy(board)
@@ -86,7 +87,7 @@ class runSim:
         
 
     def run_norm(self, numAgents, simNum, gameRules, board, depth, playerNum, mockNum, userUpdate = False, isRec = False, printStuff = True):
-    
+        printStuff = False
         if userUpdate == True:
             newBoard = copy.deepcopy(board)
             newBoard.userUpdate(playerNum)
