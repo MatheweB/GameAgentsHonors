@@ -1,4 +1,3 @@
-import boardRules as rules
 import random
 
 class Agent:
@@ -17,9 +16,10 @@ class Agent:
 
         self.moveNum = 0
 
+        self.playerNumber = None
+
     def getMove(self, board, rules):
-        
-        validMoves = rules.validMoves(board)
+        validMoves = rules.validMoves(board, self.playerNumber)
         
         if len(validMoves) > 0:
             
@@ -32,16 +32,18 @@ class Agent:
         return [str(self.coreMove), self.moveNum]
     
 
-    def makeChanges(self, board, rules, topMove):
-
-        #self.coreMove = self.getMove(board, rules)
-                
-        if self.change == True:
-            if topMove != None:
-                self.coreMove = topMove
-            else:
-                self.coreMove = self.getMove(board, rules)
-                
+    def makeChanges(self, board, rules, topMove, searchingBad):
+        if searchingBad:
+            if self.change == True: # I had a bad move
+                self.coreMove = self.coreMove # keep it
+            elif self.change == False: # I had a good move
+                self.coreMove = self.getMove(board, rules) #search!
+        else:
+            if self.change == True: # I had a bad move
+                self.coreMove = self.getMove(board, rules) #trust the population
+            elif self.change == False: # I had a good move
+                self.coreMove = self.coreMove # keep it
+ 
         self.moveNum = 0
         self.change = False
         

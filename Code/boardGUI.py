@@ -1,8 +1,4 @@
-import random
 import copy
-import operator
-
-import time
 
 
 import boardClasses as Board
@@ -12,17 +8,24 @@ import runSim as Sim
 def main():
     simRunner = Sim.runSim()
     
-    gameRules = Rules.Nim()  #Rules.TTT() #
-    OGBoard = Board.NimBoard([1,2,3,4]) #Board.TTTBoard() #
+    #gameRules = Rules.TTT()
+    #OGBoard = Board.TTTBoard()
+
+    #gameRules = Rules.Nim()
+    #OGBoard = Board.NimBoard([2,3,2])
+
+    gameRules = Rules.Minichess()
+    OGBoard = Board.ChessBoard()
+    
     board = copy.deepcopy(OGBoard)
 
     playFirst = False
     playSecond = True
     userUpdate = False
 
-    numAgents = 20 #220
-    simNum = 20 #220
-    depth = 40
+    numAgents = 10 #220
+    simNum = 10 #220
+    depth = 5
     
     gameNum = 200
 
@@ -57,7 +60,8 @@ def main():
 
                 else:
                     #print(isCert)
-                    board.fill(topMoves[0][1])
+                    topMove = topMoves[0][0]
+                    board.fill(topMove)
                     
                 #if topMoves != None:
                     #print(topMoves)
@@ -100,7 +104,8 @@ def main():
                     
                 else:
                     #print(isCert)
-                    board.fill(topMoves[0][1], agentNum)
+                    topMove = topMoves[0][0]
+                    board.fill(topMove, agentNum)
                
                 #print(topMoves)
                 print("Player: " + str(agentNum))

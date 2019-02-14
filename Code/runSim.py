@@ -2,23 +2,27 @@ import copy
 import simulation as sim
 import statistics as stat
 import agent
-import random
 import mockAgent as mock
+
 
 class runSim:
     
-    def initAgents(self, number):
+    def initAgents(self, number, agentNum):
         agentList = []
         for x in range(0,number):
             agentList.append(agent.Agent())
+            if agentNum != None:
+                agentList[x].playerNumber = agentNum
         return agentList
 
     
-    def updateBoard(self, board, highestStats, playerNum = None): 
-        move = highestStats[0][1]
+    def updateBoard(self, board, highestStats, playerNum = None):
+        move = highestStats[0][0]
         
         if playerNum != None:
+            print("filling " + str(move) + " "+ playerNum)
             board.fill(move, playerNum)
+            
             
         else:
             board.fill(move)
@@ -26,7 +30,7 @@ class runSim:
         return board
 
 
-    def run_indiff(self, numAgents, simNum, gameRules, board, depth, userUpdate = False, isRec = False, printStuff = True):
+    def run_indiff(self, numAgents, simNum, gameRules, board, depth, userUpdate = False, printStuff = True):
         printStuff = False
 
         if userUpdate == True:
@@ -47,11 +51,10 @@ class runSim:
 
             done = False
 
-            agentsList = self.initAgents(numAgents)
+            agentsList = self.initAgents(numAgents, None)
 
-            overallStats = {}
-            overallMoves = {}
-            overallMoveNums = {}
+            overallMoves = {} # move: number_total_plays
+            overallMoveNums = {} # move: (won: 3turns: 3; 4turns: 6),(lost:2turns:1)
             bestMoveDict = {}
             
             mockAgent = mock.Mocker()
@@ -59,20 +62,26 @@ class runSim:
             topMoves = None
 
             for x in range (0,simNum):
-                newAgents, completed = simulator.matchAgents(agentsList, mockAgent, copy.deepcopy(board), depth, gameRules, isRec = isRec)
+                newAgents, completed = simulator.matchAgents(agentsList, mockAgent, copy.deepcopy(board), depth, gameRules)
                 agentsList = completed + newAgents
                 
-                stats, moveDict = statMachine.getStats(agentsList)
-
-                overallStats, overallMoves = statMachine.sumStats(stats, moveDict, overallStats, overallMoves)
+                moveDict = statMachine.getStats(agentsList)
+                # stats = won: [move:x], lost: [move:y], neutral [move:z]
+                # moveDict = move: number_total_plays_this_run
+                
+                overallMoves = statMachine.sumStats(moveDict, overallMoves)
                 
                 overallMoveNums = simulator.getMoveList(agentsList, overallMoveNums)
-
-                #topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, "indiff", False)
-
-                agents = simulator.changeAgents(agentsList, board, gameRules, None)#topMoves[0][1]) #topMove endpoint in agent.py
                 
-            topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, "indiff", printStuff)
+
+                topMoves, isCert = statMachine.highestStats(overallMoves, overallMoveNums, bestMoveDict, "indiff", False)
+                if (x < simNum//2): #Explore "Bad" moves
+                    agents = simulator.changeAgents(agentsList, board, gameRules, topMoves[0][0], True) #true for searchingbadmoves
+                
+                else: #Trust the data and do good moves
+                    agents = simulator.changeAgents(agentsList, board, gameRules, topMoves[0][0], False) #topMove endpoint in agent.py (or None)
+                
+            topMoves, isCert = statMachine.highestStats(overallMoves, overallMoveNums, bestMoveDict, "indiff", True)
 
             newBoard = copy.deepcopy(board)
             
@@ -86,7 +95,7 @@ class runSim:
             return newBoard, topMoves, done, isCert
         
 
-    def run_norm(self, numAgents, simNum, gameRules, board, depth, playerNum, mockNum, userUpdate = False, isRec = False, printStuff = True):
+    def run_norm(self, numAgents, simNum, gameRules, board, depth, playerNum, mockNum, userUpdate = False, printStuff = True):
         printStuff = False
         if userUpdate == True:
             newBoard = copy.deepcopy(board)
@@ -117,31 +126,35 @@ class runSim:
 
             done = False
 
-            agentsList = self.initAgents(numAgents)
+            agentsList = self.initAgents(numAgents, playerNum)
 
-            overallStats = {}
             overallMoves = {}
             overallMoveNums = {}
             bestMoveDict = {}
+            
             mockAgent = mock.Mocker()
             
             topMoves = None
 
             
             for x in range (0,simNum):
-                newAgents, completed = simulator.matchAgents(agentsList, mockAgent, copy.deepcopy(board), depth, gameRules, playerNum, mockNum, isRec = isRec)
+                newAgents, completed = simulator.matchAgents(agentsList, mockAgent, copy.deepcopy(board), depth, gameRules, playerNum, mockNum)
                 agentsList = completed + newAgents
                 
-                stats, moveDict = statMachine.getStats(agentsList)
-                overallStats, overallMoves = statMachine.sumStats(stats, moveDict, overallStats, overallMoves)
+                moveDict = statMachine.getStats(agentsList)
+                overallMoves = statMachine.sumStats(moveDict, overallMoves)
 
                 overallMoveNums = simulator.getMoveList(agentsList, overallMoveNums)
                 
-                #topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, "norm", False)
-
-                agentsList = simulator.changeAgents(agentsList, board, gameRules, None)#topMoves[len(topMoves)-1][1]) #topMove endpoint in agent.py
+                topMoves, isCert = statMachine.highestStats(overallMoves, overallMoveNums, bestMoveDict, "norm", False)
+                if (x < simNum//2): #Explore "Bad" moves
+                    agents = simulator.changeAgents(agentsList, board, gameRules, topMoves[0][0], True) #true for searchingbadmoves
+                
+                else: #Trust the data and do good moves
+                    agents = simulator.changeAgents(agentsList, board, gameRules, topMoves[0][0], False) #topMove endpoint in agent.py (or None)
+                
                               
-            topMoves, isCert = statMachine.highestStats(overallStats, overallMoves, overallMoveNums, bestMoveDict, "norm", printStuff)
+            topMoves, isCert = statMachine.highestStats(overallMoves, overallMoveNums, bestMoveDict, "norm", True)
 
             newBoard = copy.deepcopy(board)
             

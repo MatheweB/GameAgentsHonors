@@ -9,16 +9,18 @@ class Board:
                 self.tiles.append("*")
             
         else:
-            for y in range (0,n):
+            for y in range (0,m):
                 self.tiles.append([])
-                for x in range(0,m):
+                for x in range(0,n):
                     self.tiles[y].append("*")
 
-    def fill(self, position, piece): #implement fill rules 
+    def fill(self, position, piece): #implement fill rules
         try:
             self.tiles[position[0]][position[1]] = piece
         except:
             print("SOMETHING WENT VERY WRONG in fill")
+            print(piece)
+            print(position)
             exit(5)
             
     def printBoard(self):
@@ -31,8 +33,8 @@ class Board:
         
 
         else:
-            for y in range(0,self.n):
-                for x in range(0,self.m):
+            for y in range(0,self.m):
+                for x in range(0,self.n):
                     print(str(self.tiles[y][x]) + " ", end = "")
                 print()
             print("________")

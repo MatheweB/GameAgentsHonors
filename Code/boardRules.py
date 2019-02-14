@@ -1,6 +1,5 @@
 import copy
 import interactions
-import runSim as Sim
 
 class TTT:
     def is_indiff(self):
@@ -58,10 +57,10 @@ class TTT:
             return False
         
 
-    def validMoves(self, board):
+    def validMoves(self, board, playerNum = None):
         validMoves = []
-        for y in range(0,board.n):
-            for x in range(0,board.m):
+        for y in range(0,board.m):
+            for x in range(0,board.n):
                 if board.tiles[y][x] == "*":
                     validMoves.append([y,x])
         return validMoves
@@ -120,7 +119,7 @@ class Nim:
             return False
         
 
-    def validMoves(self, board):
+    def validMoves(self, board, playerNum = None):
         validMoves = []
         for x in range(0, board.n):
             if board.tiles[x] != 0:
@@ -131,4 +130,58 @@ class Nim:
 
     def simMachine(self):
         return interactions.nimInteract()
+
+
+class Minichess:
+    
+    def is_indiff(self):
+        return False
+    
+    def win(self,board,playerNum):
+        if playerNum == "1":
+            if board.king2 == None:
+                return True
+
+        elif playerNum == "2":
+            if board.king1 == None:
+                return True
+
+        else:
+            return False
+        
+
+    def tie(self, board):
+        return False
+        
+
+    def goodMove(self, board, move, playerNum, mockNum, isRec = False):
+        newBoard = copy.deepcopy(board)
+        
+        newBoard.fill(move, playerNum)
+
+        selfWon = self.win(newBoard, playerNum)
+
+        if selfWon:
+            return True
+
+        else:
+            return False
+        
+
+    def validMoves(self, board, playerNum):
+        validMoves = []
+        for y in range(0,board.m):
+            for x in range(0,board.n):
+                piece = board.tiles[y][x]
+                if piece != "~":
+                    moves = piece.getMoves(board, playerNum)
+                    if moves != None and moves != []:
+                        for move in moves:
+                            validMoves.append(move) #Old location, New location
+
+        return validMoves
+                
+    
+    def simMachine(self):
+        return interactions.TTTInteract()
         

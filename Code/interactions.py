@@ -3,7 +3,7 @@ import mockAgent as MA
 import boardRules
 
 class TTTInteract:
-    def interact(self, board, current, mock, depth, rules, agentNum, mockNum, isRec = False):
+    def interact(self, board, current, mock, depth, rules, agentNum, mockNum):
         #if something bad happens, return "change"
         #else return "okay"
         
@@ -12,6 +12,10 @@ class TTTInteract:
         else:
             current.coreMove = current.getMove(board, rules)
             current.move = current.coreMove
+        if current.coreMove == None:
+            print("Error in TTTInteract")
+            board.printBoard()
+            exit()
             
         moves = 0
         mockMove = None
@@ -33,7 +37,8 @@ class TTTInteract:
                 current.change = True
                 current.moveNum = moves
                 return False
-            mockMove = mock.getMove(board, rules, mockNum, agentNum, isRec = isRec)
+            
+            mockMove = mock.getMove(board, rules, mockNum, agentNum)
             board.fill(mockMove, mockNum)
 
 
@@ -63,7 +68,7 @@ class TTTInteract:
 
 class nimInteract:
     
-    def interact(self, board, current, mock, depth, rules, isRec = False):
+    def interact(self, board, current, mock, depth, rules):
     #if something bad happens, return "change"
     #else return "okay"
 
@@ -82,23 +87,23 @@ class nimInteract:
             if rules.win(board):
                 current.didLose = False
                 current.didWin = True
-                current.change = True
+                current.change = False
                 current.moveNum = moves
                 return False
             
-            mock.move = mock.getMove(board, rules, isRec = isRec)
+            mock.move = mock.getMove(board, rules)
             board.fill(mock.move)
 
             if rules.win(board):
                 current.didLose = True
                 current.didWin = False
-                current.change = False
+                current.change = True
                 current.moveNum = moves
                 return False
             
             current.move = current.getMove(board, rules)
 
         current.neutral = True
-        current.change = False
+        current.change = True
         current.moveNum = moves
         return True

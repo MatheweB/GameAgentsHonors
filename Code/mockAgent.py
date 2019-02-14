@@ -1,35 +1,34 @@
-import boardRules
 import random
-import operator
-import math
 
 class Mocker:
     def __init__(self):
         self.move = None #valid move based on board
         
 
-    def getMove(self, board, rules, playerNum = None, mockNum = None, isRec = False):
-        
-        validMoves = rules.validMoves(board)
+    def getMove(self, board, rules, mockNum = None, playerNum = None):
+
+        #Mocknum is opposite of playernum
+
+        validMoves = rules.validMoves(board, mockNum)
 
         if len(validMoves) > 0:
             if playerNum == None and mockNum == None:
-                smartMove = (self.makeSmartMove(validMoves, board, rules, isRec = isRec))
+                smartMove = (self.makeSmartMove(validMoves, board, rules))
             else:
-                smartMove = (self.makeSmartMove(validMoves, board, rules, playerNum, mockNum, isRec = isRec))
+                smartMove = (self.makeSmartMove(validMoves, board, rules, mockNum, playerNum))
                 
             return smartMove
         
         else:
             print("INVALID MOVE ERROR in getMove MockAgent")
 
-    def makeSmartMove(self, validMoves, board, rules, playerNum = None, mockNum = None, isRec = False):
+    def makeSmartMove(self, validMoves, board, rules, mockNum = None, playerNum = None):
         wonMoves = []
         neutralMoves = []
         goodMoves = []
         if playerNum == None and mockNum == None:
             for move in validMoves:
-                result = rules.goodMove(board, move, isRec = isRec)
+                result = rules.goodMove(board, move)
                 if result == True:
                     wonMoves.append(move)
                 elif result == False:
@@ -37,7 +36,7 @@ class Mocker:
 
         else:
             for move in validMoves:
-                if rules.goodMove(board, move, playerNum, mockNum, isRec = isRec):
+                if rules.goodMove(board, move, mockNum, playerNum):
                     goodMoves.append(move)
 
         #print(goodMoves)

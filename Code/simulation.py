@@ -1,5 +1,4 @@
 import copy
-import boardRules
 
 class Simulator:
     
@@ -11,7 +10,7 @@ class Simulator:
             agent.neutral = False
         return agents
 
-    def getMoveList(self, agents, moveDict):
+    def getMoveList(self, agents, moveDict): # Adds wins and losses to the {move: (won:x, lost:y)} dictionary
         for agent in agents:
             if agent.didWin == True:
                 move = agent.getMoveItem() #0 = move, 1 = movenum
@@ -38,16 +37,31 @@ class Simulator:
                     moveDict[move[0]]["lost"][move[1]] = 1
                 else:
                     moveDict[move[0]]["lost"][move[1]] += 1
+                    
+
+            elif agent.didLose == False and agent.didWin == False:
+                move = agent.getMoveItem() #0 = move, 1 = movenum
+                if move[0] not in moveDict:
+                    moveDict[move[0]] = {}
+                    
+                if "neutral" not in moveDict[move[0]]:
+                    moveDict[move[0]]["neutral"] = {}
+
+                if move[1] not in moveDict[move[0]]["neutral"]:
+                    moveDict[move[0]]["neutral"][move[1]] = 1
+                else:
+                    moveDict[move[0]]["neutral"][move[1]] += 1
+
 
         return moveDict
     
 
-    def changeAgents(self, agents, board, rules, topMove):
+    def changeAgents(self, agents, board, rules, topMove, searchingBad):
         for agent in agents:
-            agent.makeChanges(board, rules, topMove)
+            agent.makeChanges(board, rules, topMove, searchingBad)
         return agents
 
-    def matchAgents(self, agents, mockAgent, initBoard, depth, rules, playerNum = None, mockNum = None, isRec = False): #divide list into those that go 1st and those that go 2nd
+    def matchAgents(self, agents, mockAgent, initBoard, depth, rules, playerNum = None, mockNum = None): #divide list into those that go 1st and those that go 2nd
 
         newAgents = []
         completed = []
@@ -62,9 +76,9 @@ class Simulator:
             simMachine = rules.simMachine()
 
             if rules.is_indiff():
-                should_continue = simMachine.interact(board, current, mockAgent, depth, rules, isRec = isRec)
+                should_continue = simMachine.interact(board, current, mockAgent, depth, rules)
             else:
-                should_continue = simMachine.interact(board, current, mockAgent, depth, rules, playerNum, mockNum, isRec = isRec)               
+                should_continue = simMachine.interact(board, current, mockAgent, depth, rules, playerNum, mockNum)               
 
             if should_continue:
                 newAgents.append(current)
