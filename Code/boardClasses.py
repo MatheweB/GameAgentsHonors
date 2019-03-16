@@ -1,5 +1,6 @@
 import board
 import piece as Pieces
+import boardRules as rules
 
 class TTTBoard(board.Board):
     def __init__(self):
@@ -80,38 +81,57 @@ class ChessBoard(board.Board):
         
 
     def userUpdate(self, playerNum):
-        print("You are player " + str(playerNum) + ". Choose piece: ")
+        ChessRules = rules.Minichess()
+        validMoves = ChessRules.validMoves(self,playerNum)
 
-        valid = False
-        while not valid:
-            try:
-                prow = int(input("row: "))
-                pcol = int(input("col: "))
-                piece = self.tiles[prow][pcol]
-                pieceName = piece.name
-                if int(pieceName[1]) != int(playerNum):
-                    print(pieceName + "? That's not your piece! Try again.")
+        allGood = False
+        while not allGood:
+            print("You are player " + str(playerNum) + ". Choose piece: ")
+
+            valid = False
+            while not valid:
+                try:
+                    prow = int(input("row: "))
+                    pcol = int(input("col: "))
+                    piece = self.tiles[prow][pcol]
+                    pieceName = piece.name
+                    if int(pieceName[1]) != int(playerNum):
+                        print(pieceName + "? That's not your piece! Try again.")
+                        print()
+                    else:
+                        valid = True
+                except:
+                    print("Empty piece!")
+                    print("Try picking a piece again.")
+            print("---------------")
+            print()
+            print("You chose " + pieceName + ". Choose new location: ")
+            
+            valid = False
+            validMoveOverall = True
+            while not valid:
+                try:
+                    row = int(input("row: "))
+                    col = int(input("col: "))
+                    move = [[prow,pcol],[row,col]]
+
+                    if [[prow,pcol],[row,col]] in validMoves:
+                        self.fill(move)
+                        valid = True
+                    else:
+                        valid = True
+                        validMoveOverall = False
+                except:
+                    print("Invalid new location, try again!")
                     print()
-                else:
-                    valid = True
-            except:
-                print("Empty piece!")
-                print("Try picking a piece again.")
-        print("---------------")
-        print()
-        print("You chose " + pieceName + ". Choose new location: ")
-        
-        valid = False
-        while not valid:
-            try:
-                row = int(input("row: "))
-                col = int(input("col: "))
-                move = [[prow,pcol],[row,col]]
-                self.fill(move)
-                valid = True
-            except:
-                print("Invalid new location, try again!")
+
+            if not validMoveOverall:
+                print("Invalid move, try again!")
                 print()
+                self.printBoard()
+                print()
+            else:
+                allGood = True
                 
         print("---------------")
         print()

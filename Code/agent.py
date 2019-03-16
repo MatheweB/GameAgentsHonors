@@ -37,12 +37,13 @@ class Agent:
             if self.change == True: # I had a bad move
                 self.coreMove = self.coreMove # keep it
             elif self.change == False: # I had a good move
-                self.coreMove = self.getMove(board, rules) #search!
+                self.coreMove =  self.getMove(board, rules) #search!
         else:
             if self.change == True: # I had a bad move
-                self.coreMove = self.getMove(board, rules) #trust the population
+                self.coreMove = topMove #trust the population
             elif self.change == False: # I had a good move
-                self.coreMove = self.coreMove # keep it
+                self.coreMove =  self.getMove(board, rules) # keep it
+                
  
         self.moveNum = 0
         self.change = False

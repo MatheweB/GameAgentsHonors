@@ -1,6 +1,4 @@
 import copy
-
-
 import boardClasses as Board
 import boardRules as Rules
 import runSim as Sim
@@ -8,14 +6,14 @@ import runSim as Sim
 def main():
     simRunner = Sim.runSim()
     
-    #gameRules = Rules.TTT()
-    #OGBoard = Board.TTTBoard()
+    gameRules = Rules.TTT()
+    OGBoard = Board.TTTBoard()
 
     #gameRules = Rules.Nim()
-    #OGBoard = Board.NimBoard([2,3,2])
+    #OGBoard = Board.NimBoard([1,2,3,4,5])
 
-    gameRules = Rules.Minichess()
-    OGBoard = Board.ChessBoard()
+    #gameRules = Rules.Minichess()
+    #OGBoard = Board.ChessBoard()
     
     board = copy.deepcopy(OGBoard)
 
@@ -25,7 +23,7 @@ def main():
 
     numAgents = 10 #220
     simNum = 10 #220
-    depth = 5
+    depth = 100
     
     gameNum = 200
 
