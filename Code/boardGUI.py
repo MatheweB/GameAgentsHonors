@@ -6,14 +6,14 @@ import runSim as Sim
 def main():
     simRunner = Sim.runSim()
     
-    gameRules = Rules.TTT()
-    OGBoard = Board.TTTBoard()
+    #gameRules = Rules.TTT()
+    #OGBoard = Board.TTTBoard()
 
     #gameRules = Rules.Nim()
     #OGBoard = Board.NimBoard([1,2,3,4,5])
 
-    #gameRules = Rules.Minichess()
-    #OGBoard = Board.ChessBoard()
+    gameRules = Rules.Minichess()
+    OGBoard = Board.ChessBoard()
     
     board = copy.deepcopy(OGBoard)
 
@@ -21,9 +21,9 @@ def main():
     playSecond = True
     userUpdate = False
 
-    numAgents = 10 #220
-    simNum = 10 #220
-    depth = 100
+    numAgents = 50 #220
+    simNum = 100 #220
+    depth = 20
     
     gameNum = 200
 

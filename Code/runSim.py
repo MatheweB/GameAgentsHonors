@@ -75,10 +75,11 @@ class runSim:
                 
                 
 
-                topMoves, isCert = statMachine.highestStats(overallMoves, overallMoveNums, bestMoveDict, "indiff", False)
+                
                 if (x < simNum//2): #Explore "Bad" moves
-                    agents = simulator.changeAgents(agentsList, board, gameRules, topMoves[0][0], True) #true for searchingbadmoves
-                else: #Trust the data and do good moves
+                    agents = simulator.changeAgents(agentsList, board, gameRules, None, True) #true for searchingbadmoves
+                else: #Trust the data and do good moves\
+                    topMoves, isCert = statMachine.highestStats(overallMoves, overallMoveNums, bestMoveDict, "indiff", False)
                     agents = simulator.changeAgents(agentsList, board, gameRules, topMoves[0][0], False) #topMove endpoint in agent.py (or None)
                 
             topMoves, isCert = statMachine.highestStats(overallMoves, overallMoveNums, bestMoveDict, "indiff", True)
@@ -145,11 +146,11 @@ class runSim:
 
                 overallMoveNums = simulator.getMoveList(agentsList, overallMoveNums)
                 
-                topMoves, isCert = statMachine.highestStats(overallMoves, overallMoveNums, bestMoveDict, "norm", False)
                 if (x < simNum//2): #Explore "Bad" moves
-                    agents = simulator.changeAgents(agentsList, board, gameRules, topMoves[0][0], True) #true for searchingbadmoves
+                    agents = simulator.changeAgents(agentsList, board, gameRules, None, True) #true for searchingbadmoves
                 
                 else: #Trust the data and do good moves
+                    topMoves, isCert = statMachine.highestStats(overallMoves, overallMoveNums, bestMoveDict, "norm", False)
                     agents = simulator.changeAgents(agentsList, board, gameRules, topMoves[0][0], False) #topMove endpoint in agent.py (or None)
                 
                               
