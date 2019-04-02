@@ -6,14 +6,14 @@ import runSim as Sim
 def main():
     simRunner = Sim.runSim()
     
-    #gameRules = Rules.TTT()
-    #OGBoard = Board.TTTBoard()
+    gameRules = Rules.TTT()
+    OGBoard = Board.TTTBoard()
 
     #gameRules = Rules.Nim()
-    #OGBoard = Board.NimBoard([1,2,3,4,5])
+    #OGBoard = Board.NimBoard([2,4,2])
 
-    gameRules = Rules.Minichess()
-    OGBoard = Board.ChessBoard()
+    #gameRules = Rules.Minichess()
+    #OGBoard = Board.ChessBoard()
     
     board = copy.deepcopy(OGBoard)
 
@@ -22,15 +22,12 @@ def main():
     userUpdate = False
 
     numAgents = 50 #220
-    simNum = 100 #220
+    simNum = 200 #220
     depth = 20
     
     gameNum = 200
 
     for game in range(0,gameNum):
-
-
-
         if gameRules.is_indiff(): # An indifferent game
             if playFirst:
                 board.printBoard()

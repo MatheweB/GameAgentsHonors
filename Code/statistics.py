@@ -58,9 +58,14 @@ class StatMachine:
                         loss = overallMoveNums[move]["lost"]
                         
                     except:
-                        added = True
-                        foundWins = True
-                        certainList.append([moveLiteral, "won"])
+                        
+                        try:
+                            neutral = overallMoveNums[move]["neutral"]
+                            
+                        except:
+                            added = True
+                            foundWins = True
+                            certainList.append([moveLiteral, "won"])
                 except:
                     pass
                 
@@ -86,37 +91,72 @@ class StatMachine:
         return certainList, foundWins, foundTies
 
 
-    def createWLRatios(self, overallMoveNums, ratioDict):
+    def createWLRatios(self, overallMoveNums, ratioDict, gameType):
         maxMoveNum = -1
-        for move in overallMoveNums.keys():
-            for status in overallMoveNums[move].keys():
-                if status == "won":
-                    for move_num in overallMoveNums[move][status].keys():
 
+        if gameType == "indiff":
+            for move in overallMoveNums.keys():  
+                for status in overallMoveNums[move].keys():       
+                    if status == "won":
+                        for move_num in overallMoveNums[move][status].keys(): 
+                            if move_num > maxMoveNum:
+                                maxMoveNum = move_num
+
+                            try:
+                                lostNum = overallMoveNums[move]["lost"][move_num]
+                                #do = True
+                                
+                            except:
+                                lostNum = 0
+                                #do = False
+
+                            wonNum = overallMoveNums[move][status][move_num]
+                            
+                            percentage = (wonNum/(wonNum+lostNum))
+                            
+                            if move not in ratioDict:
+                                ratioDict[move] = {}
+                                ratioDict[move][move_num] = percentage
+                                
+                            else:
+                                ratioDict[move][move_num] = percentage
+               
+        elif gameType == "norm":
+            maxMoveNum = -1
+            for move in overallMoveNums.keys():
+                moveWin = 0
+                moveLoss = 0
+
+                try:
+                    for move_num in overallMoveNums[move]["won"].keys():
+                        moveWin += overallMoveNums[move]["won"][move_num]
+                except:
+                    pass
+                        
+                try:
+                    for move_num in overallMoveNums[move]["lost"].keys():
+                        moveLoss += overallMoveNums[move]["lost"][move_num]
+                except:
+                    pass
+
+
+                try:
+                    for move_num in overallMoveNums[move]["won"].keys():
                         if move_num > maxMoveNum:
                             maxMoveNum = move_num
-
-                        try:
-                            lostNum = overallMoveNums[move]["lost"][move_num]
-                            #do = True
-                            
-                        except:
-                            lostNum = 0
-                            #do = False
-
-                        wonNum = overallMoveNums[move][status][move_num]
+                        percentage = moveWin/(moveWin+moveLoss)
                         
-                        percentage = (wonNum/(wonNum+lostNum))
-
-                        scaledNum = wonNum/(wonNum+lostNum)
-                        #scaledNum = wonNum*percentage
-
                         if move not in ratioDict:
                             ratioDict[move] = {}
-                            ratioDict[move][move_num] = scaledNum #percentage
-                            
+                            ratioDict[move][move_num] = percentage
+                                        
                         else:
-                            ratioDict[move][move_num] = scaledNum #percentage
+                            ratioDict[move][move_num] = percentage
+                except:
+                    pass
+
+
+        
         return maxMoveNum
 
     def createMoveNumList(self, listOfMoves, maxMoveNum, ratioDict):
@@ -131,6 +171,7 @@ class StatMachine:
 
         for x in range(0,len(listOfMoves)):
             listOfMoves[x] = sorted(listOfMoves[x], key=operator.itemgetter(0), reverse = True)
+
             
 
     def makeMoveRatioSums(self, itemRanks, listOfMoves, gameType):
@@ -156,17 +197,18 @@ class StatMachine:
                         else:
                             if moveRatio > itemRanks[myMove][1]:
                                 itemRanks[myMove][1] = moveRatio
+
         
     def pickBestMove(self, itemRanks, moveDict, gameType):
         bestMove = None
-        considerOnes = False
+        considerOnes = False #only for indifferent games
         bestDictList = {}
 
-        for item in itemRanks:                
+        for item in itemRanks:
             ratio1 = itemRanks[item][0]
             ratio2 = itemRanks[item][1]
 
-            if ratio2 == 1:
+            if ratio2 == 1 and gameType == "indiff":
                 if considerOnes == False:
                     considerOnes = True
                     bestMove = None
@@ -218,6 +260,7 @@ class StatMachine:
             for key in moveDict.keys():
                 bestMove = str(key)
                 break
+        #print(bestMove) shows progression of best move!
 
 
         return str(bestMove[0])
@@ -239,7 +282,7 @@ class StatMachine:
 
         ## Creates win/loss ratio overages for 4 moves, 3 moves, etc...
         ratioDict = {}
-        maxMoveNum = self.createWLRatios(overallMoveNums, ratioDict)
+        maxMoveNum = self.createWLRatios(overallMoveNums, ratioDict, gameType)
 
         #Creates a list of move depth and wins in order ([[list of 1-move wins], [list of 2-move wins], etc..])
         listOfMoves = []
@@ -284,7 +327,6 @@ class StatMachine:
             sortedList = sorted(unsortedList, key=operator.itemgetter(1), reverse = False)
 
 
-
         if len(certainList) > 0 and (foundWins or foundTies):
             wList = []
             nList = []
@@ -298,12 +340,24 @@ class StatMachine:
                 else:
                     lList.append(item)
                     
+                    
             totalList = wList + nList + lList
             isCert = totalList[0][1]
             return totalList, isCert
         
+##        if (not foundWins) and (foundTies) and (sortedList[0][1] == 0):
+##            tieList = []
+##            for moveString in overallMoveNums.keys():
+##                try:
+##                    myMove = overallMoveNums[moveString]["neutral"]
+##                    tieList.append([self.arrayify(moveString), "neutral"])
+##                    return tieList, False
+##                except:
+##                    pass
+                
         if printStuff:
             print(overallMoveNums)
+            print(sortedList)
             print('-----')
 
         return sortedList, False #not certain that I won
