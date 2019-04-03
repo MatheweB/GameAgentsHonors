@@ -56,15 +56,16 @@ class StatMachine:
                     wins = overallMoveNums[move]["won"]
                     try:
                         loss = overallMoveNums[move]["lost"]
-                        
+                            
                     except:
+                        added = True
+                        foundWins = True
                         
                         try:
                             neutral = overallMoveNums[move]["neutral"]
+                            certainList.append([moveLiteral, "wonN"])
                             
                         except:
-                            added = True
-                            foundWins = True
                             certainList.append([moveLiteral, "won"])
                 except:
                     pass
@@ -329,31 +330,36 @@ class StatMachine:
 
         if len(certainList) > 0 and (foundWins or foundTies):
             wList = []
+            wNList = []
             nList = []
             lList = []
             
             for item in certainList:
                 if item[1] == "won":
                     wList.append(item)
+                elif item[1] == "wonN":
+                    wNList.append(item)
                 elif item[1] == "neutral":
                     nList.append(item)
                 else:
                     lList.append(item)
                     
-                    
-            totalList = wList + nList + lList
+            
+            totalList = wList + wNList + nList + lList
             isCert = totalList[0][1]
             return totalList, isCert
+
+        if (not foundTies) and (not foundWins) and (sortedList[0][1] == 0):
+            newRetList = []
+            for moveString in overallMoveNums.keys():
+                try:
+                    myMove = overallMoveNums[moveString]["neutral"]
+                    newRetList.append([self.arrayify(moveString), "neutral"])
+                    return newRetList, False
+                except:
+                    pass
+            
         
-##        if (not foundWins) and (foundTies) and (sortedList[0][1] == 0):
-##            tieList = []
-##            for moveString in overallMoveNums.keys():
-##                try:
-##                    myMove = overallMoveNums[moveString]["neutral"]
-##                    tieList.append([self.arrayify(moveString), "neutral"])
-##                    return tieList, False
-##                except:
-##                    pass
                 
         if printStuff:
             print(overallMoveNums)
